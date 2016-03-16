@@ -1,0 +1,116 @@
+<link rel="import" href="gs-file-storage.html">
+<link rel="import" href="gs-submit-file.html">
+<link rel="import" href="../../../gs-file-explorer/dist/components/gs-file-explorer.html">
+<dom-module id="gs-file-storage-demo">
+  <template>
+    <style>
+      #demo-header {
+        margin-left: 30%;
+        background-color: #19A0CF;
+        display: table;
+        font-size: 1.5em;
+        border-radius: 5px;
+        width: 40vw;
+        text-align: center;
+      }
+
+      #explorer {
+        padding: 10px;
+        width: 20vw;
+        height: 10vh;
+        background-color: #19A0CF;
+        display: table;
+        border-radius: 10px;
+        margin-left: 29.5vw;
+      }
+
+      #submit {
+        width: 20vw;
+        margin-left: 29.5vw;
+        float: left;
+      }
+
+      #submit ::content > * {
+        float: left;
+        margin-top: 10px;
+        clear: left;
+      }
+
+      #submit ::content input {
+        width: 20vw;
+        margin-top: 20px;
+      }
+      #submit ::content textarea {
+        width: 20vw;
+        height: 25vh;
+        margin-top: 10px;
+      }
+      #submit ::content button {
+        border-radius: 7px;
+        background-color: #C10814;
+        color: white;
+      }
+
+      /*# sourceMappingURL=style.css.map */
+
+    </style>
+
+    <p id="demo-header">An example of <br> <code>&lt;gs-file-storage&gt;</code>:</p>
+
+    <gs-file-explorer id="explorer" files={{files}}> </gs-file-explorer>
+
+    <gs-submit-file name-field={{fileDemo.name}} text-field={{fileDemo.content}} button-name="Save" id="submit"></gs-submit-file>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'gs-file-storage-demo',
+      properties: {
+        fileDemo: {
+          type: {},
+          notify: true
+        }
+      },
+      behaviors: [GsFileStorageBehavior],
+      listeners: {
+        'openFile': 'openFile'
+      },
+      attached: function() {
+        var file, _i, _len, _ref;
+        this.demofiles = [
+          {
+            name: "index.html",
+            content: "This is an html file",
+            syntax: "html"
+          }, {
+            name: "script.js",
+            content: "This is an javascript file",
+            syntax: "js"
+          }, {
+            name: "style.css",
+            content: "This is an css file",
+            syntax: "Css"
+          }, {
+            name: "style.css",
+            content: "This is an css file",
+            syntax: "Css"
+          }
+        ];
+        _ref = this.demofiles;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          file = _ref[_i];
+          this.addFile(file);
+        }
+        return this.addFile({
+          name: "index.html",
+          content: "This is an html file",
+          syntax: "html"
+        });
+      },
+      openFile: function(polymerEvent) {
+        return this.set('fileDemo', this.getFile(polymerEvent.detail.file.name));
+      }
+    });
+
+  </script>
+</dom-module>

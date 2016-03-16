@@ -1,0 +1,74 @@
+<dom-module id="gs-file-storage">
+  <template>
+    <style>
+      
+
+      /*# sourceMappingURL=style.css.map */
+
+    </style>
+
+
+    <template is="dom-repeat" items="{{toStorage}}" as="storageable">
+      
+      <iron-localstorage 
+        name="{{storageable.name}}" 
+        value="{{storageable}}">
+      </iron-localstorage>
+
+    </template>
+
+  </template>
+  <script>
+    var GsFileStorageBehavior;
+
+    GsFileStorageBehavior = {
+      ready: function() {
+        this.storage = window.localStorage;
+        if (this.storage.getItem('gsFiles') === void 0 || this.storage.getItem('gsFiles') === null) {
+          return this.storage.setItem('gsFiles', this.strfy([]));
+        }
+      },
+      strfy: function(item) {
+        return JSON.stringify(item);
+      },
+      parseJs: function(string) {
+        return JSON.parse(string);
+      },
+      filesInStorageToObjs: function() {
+        var stringFiles;
+        stringFiles = this.storage.getItem('gsFiles');
+        return this.parseJs(stringFiles);
+      },
+      addFile: function(file) {
+        var jsFiles;
+        if (this.fileNameValid(file.name)) {
+          jsFiles = this.filesInStorageToObjs();
+          this.files = jsFiles;
+          jsFiles.push(file);
+          return this.storage.setItem('gsFiles', this.strfy(jsFiles));
+        } else {
+          throw "Invalid file name";
+        }
+      },
+      fileNameValid: function(name) {
+        return (name !== void 0) && name.match(/[a-zA-Z]/) && name[0] !== " ";
+      },
+      getFile: function(name) {
+        var file, jsFiles, _i, _len;
+        jsFiles = this.filesInStorageToObjs();
+        for (_i = 0, _len = jsFiles.length; _i < _len; _i++) {
+          file = jsFiles[_i];
+          if (file.name === name) {
+            return file;
+          }
+        }
+      },
+      getAllFilesStored: function() {
+        var stringFiles;
+        stringFiles = this.storage.getItem('gsFiles');
+        return this.parseJs(stringFiles);
+      }
+    };
+
+  </script>
+</dom-module>

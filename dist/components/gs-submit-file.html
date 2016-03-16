@@ -1,0 +1,58 @@
+<dom-module id="gs-submit-file">
+  <template>
+    <style>
+      
+
+      /*# sourceMappingURL=style.css.map */
+
+    </style>
+
+
+    <input on-keypress="checkIfEnter" 
+      placeholder="name" 
+      id="nameField" 
+      type="text"
+      value={{nameField}} />
+
+    <textarea id="textField" text="content" value={{textField}}>
+      
+    </textarea>
+
+    <button on-tap="submitFields">{{buttonName}}</button>
+  </template>
+  <script>
+    Polymer({
+      is: 'gs-submit-file',
+      properties: {
+        buttonName: {
+          type: String,
+          value: "Submit"
+        },
+        nameField: {
+          type: String,
+          value: "sarasa"
+        },
+        textField: {
+          type: String
+        }
+      },
+      submitFields: function(event) {
+        this.nameField = this.$.nameField;
+        this.textField = this.$.textField;
+        return this.fire('fileEvent', {
+          file: {
+            name: this.nameField.value,
+            content: this.textField.value
+          }
+        });
+      },
+      checkIfEnter: function(event) {
+        console.log("Key pressed");
+        if (event.keyCode === 13) {
+          return this.submitFields(event);
+        }
+      }
+    });
+
+  </script>
+</dom-module>

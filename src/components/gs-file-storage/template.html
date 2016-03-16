@@ -1,0 +1,9 @@
+
+<template is="dom-repeat" items="{{toStorage}}" as="storageable">
+  
+  <iron-localstorage 
+    name="{{storageable.name}}" 
+    value="{{storageable}}">
+  </iron-localstorage>
+
+</template>
