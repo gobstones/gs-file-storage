@@ -1,4 +1,3 @@
-
 Polymer
   is: '#GRUNT_COMPONENT_NAME'
 
@@ -11,38 +10,40 @@ Polymer
       type: {}
       notify: true
 
-  behaviors: [GsFileStorageBehavior]
-
   listeners:
     'openFile' : 'openFile'
 
-  attached: ->
-    @.demofiles = [
+  ready: ->
+    @storage = GsFileStorageBehavior()
+
+    @demofiles = [
         name: "index.html"
-        content: "This is an html file"
+        content: "This is a html file"
         syntax: "html"
       , 
         name: "script.js"
-        content: "This is an javascript file"
+        content: "This is a javascript file"
         syntax: "js"
       ,
         name: "style.css"
-        content: "This is an css file"
+        content: "This is a css file"
         syntax: "Css"
       ,
         name: "style.css"
-        content: "This is an css file"
+        content: "This is another content for css file"
         syntax: "Css"
     ]
 
-    for file in @.demofiles
-      @.addFile(file)
+    for file in @demofiles
+      @storage.addFile(file)
 
-    @.addFile(
+    @storage.addFile(
       name: "index.html"
-      content: "This is an html file"
+      content: "This is another content for html file"
       syntax: "html"
     )
 
+    @files = @storage.getAllFiles()
+
   openFile: (polymerEvent)->
-    @.set('fileDemo',@.getFile(polymerEvent.detail.file.name))
+    @set('fileDemo',@storage.getFile(polymerEvent.detail.file.name))

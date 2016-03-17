@@ -71,44 +71,45 @@
           notify: true
         }
       },
-      behaviors: [GsFileStorageBehavior],
       listeners: {
         'openFile': 'openFile'
       },
-      attached: function() {
+      ready: function() {
         var file, _i, _len, _ref;
+        this.storage = GsFileStorageBehavior();
         this.demofiles = [
           {
             name: "index.html",
-            content: "This is an html file",
+            content: "This is a html file",
             syntax: "html"
           }, {
             name: "script.js",
-            content: "This is an javascript file",
+            content: "This is a javascript file",
             syntax: "js"
           }, {
             name: "style.css",
-            content: "This is an css file",
+            content: "This is a css file",
             syntax: "Css"
           }, {
             name: "style.css",
-            content: "This is an css file",
+            content: "This is another content for css file",
             syntax: "Css"
           }
         ];
         _ref = this.demofiles;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           file = _ref[_i];
-          this.addFile(file);
+          this.storage.addFile(file);
         }
-        return this.addFile({
+        this.storage.addFile({
           name: "index.html",
-          content: "This is an html file",
+          content: "This is another content for html file",
           syntax: "html"
         });
+        return this.files = this.storage.getAllFiles();
       },
       openFile: function(polymerEvent) {
-        return this.set('fileDemo', this.getFile(polymerEvent.detail.file.name));
+        return this.set('fileDemo', this.storage.getFile(polymerEvent.detail.file.name));
       }
     });
 
