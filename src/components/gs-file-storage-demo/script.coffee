@@ -12,38 +12,22 @@ Polymer
 
   listeners:
     'openFile' : 'openFile'
+    'saveFile' : 'saveFile'
 
   ready: ->
     @storage = GsFileStorageBehavior()
 
-    @demofiles = [
-        name: "index.html"
-        content: "This is a html file"
-        syntax: "html"
-      , 
-        name: "script.js"
-        content: "This is a javascript file"
-        syntax: "js"
-      ,
-        name: "style.css"
-        content: "This is a css file"
-        syntax: "Css"
-      ,
-        name: "style.css"
-        content: "This is another content for css file"
-        syntax: "Css"
-    ]
-
-    for file in @demofiles
-      @storage.addFile(file)
-
-    @storage.addFile(
+    file =
       name: "index.html"
-      content: "This is another content for html file"
+      content: "This is a html file"
       syntax: "html"
-    )
+   
+    @storage.addFile(file)
 
     @files = @storage.getAllFiles()
 
   openFile: (polymerEvent)->
     @set('fileDemo',@storage.getFile(polymerEvent.detail.file.name))
+
+  saveFile: (polymerEvent)->
+    @storage.addFile(polymerEvent.detail.file)

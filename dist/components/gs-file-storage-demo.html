@@ -5,50 +5,57 @@
   <template>
     <style>
       #demo-header {
-        margin-left: 30%;
-        background-color: #19A0CF;
+        margin: 0 auto;
+        background-color: #E70126;
         display: table;
         font-size: 1.5em;
         border-radius: 5px;
         width: 40vw;
         text-align: center;
+        margin-top: 5vh;
+        height: 10vh;
       }
 
-      #explorer {
+      .fileExplorer {
         padding: 10px;
         width: 20vw;
         height: 10vh;
         background-color: #19A0CF;
         display: table;
         border-radius: 10px;
-        margin-left: 29.5vw;
-      }
-
-      #submit {
-        width: 20vw;
-        margin-left: 29.5vw;
-        float: left;
+        margin: 0 auto;
       }
 
       #submit ::content > * {
-        float: left;
+        margin: 0 auto;
         margin-top: 10px;
-        clear: left;
+        margin-left: 18%;
       }
 
       #submit ::content input {
-        width: 20vw;
+        width: 20.3vw;
         margin-top: 20px;
+        border: 0;
       }
       #submit ::content textarea {
         width: 20vw;
         height: 25vh;
         margin-top: 10px;
+        border: 0;
       }
       #submit ::content button {
-        border-radius: 7px;
-        background-color: #C10814;
-        color: white;
+        border-radius: 2px;
+        background-color: #E7E9EE;
+        color: black;
+      }
+      #submit ::content button:hover {
+        background-color: #E70126;
+        border-color: #E70126;
+      }
+
+      #column-1, #column-2, #column-3 {
+        float: left;
+        width: 33vw;
       }
 
       /*# sourceMappingURL=style.css.map */
@@ -57,9 +64,27 @@
 
     <p id="demo-header">An example of <br> <code>&lt;gs-file-storage&gt;</code>:</p>
 
-    <gs-file-explorer id="explorer" files={{files}}> </gs-file-explorer>
+    <div id="column-1">
+      
+      <gs-file-explorer class="fileExplorer" id="explorer-left" files={{files}}> </gs-file-explorer>
 
-    <gs-submit-file name-field={{fileDemo.name}} text-field={{fileDemo.content}} button-name="Save" id="submit"></gs-submit-file>
+    </div>
+
+    <div id="column-2">
+      
+      <gs-submit-file name-field={{fileDemo.name}} text-field={{fileDemo.content}} button-name="Save" id="submit"></gs-submit-file>
+
+    </div >
+
+
+    <div id="column-3">
+      
+      <gs-file-explorer class="fileExplorer" id="explorer-right" files={{files}}> </gs-file-explorer>
+
+    </div>
+
+
+
 
   </template>
   <script>
@@ -72,44 +97,25 @@
         }
       },
       listeners: {
-        'openFile': 'openFile'
+        'openFile': 'openFile',
+        'saveFile': 'saveFile'
       },
       ready: function() {
-        var file, _i, _len, _ref;
+        var file;
         this.storage = GsFileStorageBehavior();
-        this.demofiles = [
-          {
-            name: "index.html",
-            content: "This is a html file",
-            syntax: "html"
-          }, {
-            name: "script.js",
-            content: "This is a javascript file",
-            syntax: "js"
-          }, {
-            name: "style.css",
-            content: "This is a css file",
-            syntax: "Css"
-          }, {
-            name: "style.css",
-            content: "This is another content for css file",
-            syntax: "Css"
-          }
-        ];
-        _ref = this.demofiles;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          file = _ref[_i];
-          this.storage.addFile(file);
-        }
-        this.storage.addFile({
+        file = {
           name: "index.html",
-          content: "This is another content for html file",
+          content: "This is a html file",
           syntax: "html"
-        });
+        };
+        this.storage.addFile(file);
         return this.files = this.storage.getAllFiles();
       },
       openFile: function(polymerEvent) {
         return this.set('fileDemo', this.storage.getFile(polymerEvent.detail.file.name));
+      },
+      saveFile: function(polymerEvent) {
+        return this.storage.addFile(polymerEvent.detail.file);
       }
     });
 

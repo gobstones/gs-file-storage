@@ -1,50 +1,60 @@
-
 #demo-header {
-  margin-left: 30%;
-  background-color: #19A0CF;
+  margin: 0 auto;
+  background-color: #E70126;
   display: table;
   font-size: 1.5em;
   border-radius: 5px;
   width: 40vw;
   text-align: center;
+  margin-top: 5vh;
+  height: 10vh;
 }
 
-#explorer {
+.fileExplorer {
   padding: 10px;
   width: 20vw;
   height: 10vh;
   background-color: #19A0CF;
   display: table;
   border-radius: 10px;
-  margin-left: 29.5vw;
-}
-
-#submit {
-  width: 20vw;
-  margin-left: 29.5vw;
-  float: left;
+  margin: 0 auto;
 }
 
 #submit ::content > * {
-  float: left;
+  margin: 0 auto;
   margin-top: 10px;
-  clear: left;
+  margin-left: 18%;
 }
 
-#submit ::content {
-  input {
-    width: 20vw;
-    margin-top: 20px;
-  }
-  textarea {
-    width: 20vw;
-    height: 25vh;
-    margin-top: 10px;
-  }
+#submit {
+  ::content {
+     
+    input {
+      width: 20.3vw;
+      margin-top: 20px;
+      border: 0;
+    }
+    textarea {
+      width: 20vw;
+      height: 25vh;
+      margin-top: 10px;
+      border: 0;
+    }
 
-  button {
-    border-radius: 7px;
-    background-color: #C10814;
-    color: white;
+    button {
+      border-radius: 2px;
+      background-color: #E7E9EE;
+      color: black;
+
+    }
+    button:hover {
+      background-color: #E70126;
+      border-color: #E70126;
+    }
   }
+}
+
+#column-1, #column-2, #column-3 {
+  float: left;
+  width: 33vw;
 }

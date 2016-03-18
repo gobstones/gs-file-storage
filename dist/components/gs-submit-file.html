@@ -37,12 +37,10 @@
         }
       },
       submitFields: function(event) {
-        this.nameField = this.$.nameField;
-        this.textField = this.$.textField;
-        return this.fire('fileEvent', {
+        return this.fire('saveFile', {
           file: {
-            name: this.nameField.value,
-            content: this.textField.value
+            name: this.$.nameField.value,
+            content: this.$.textField.value
           }
         });
       },

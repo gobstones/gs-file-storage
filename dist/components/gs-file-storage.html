@@ -22,7 +22,14 @@
     var GsFileStorageBehavior;
 
     GsFileStorageBehavior = function() {
-      var methods;
+      var methods, _checkServiceInNameSpace;
+      _checkServiceInNameSpace = function() {
+        window.GS = window.GS || {};
+        return window.GS.GSFILESTORAGE = window.GS.GSFILESTORAGE || (function() {
+          methods.initialize();
+          return methods;
+        })();
+      };
       methods = {
         _strfy: function(item) {
           return JSON.stringify(item);
@@ -83,8 +90,8 @@
           }
         }
       };
-      methods.initialize();
-      return methods;
+      _checkServiceInNameSpace();
+      return window.GS.GSFILESTORAGE;
     };
 
   </script>

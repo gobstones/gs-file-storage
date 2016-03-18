@@ -2,6 +2,17 @@ GsFileStorageBehavior = ->
   # Service for managing localStorage files
   # use gsFiles as a key in localStorage
 
+  # Mehtod for check if nameSpace is created and
+  # service initialized.
+  _checkServiceInNameSpace = ->
+    window.GS = window.GS || {}
+    window.GS.GSFILESTORAGE = 
+      window.GS.GSFILESTORAGE || 
+      do -> 
+        methods.initialize() 
+        methods
+
+
   methods =
 
     # Method for no use Json api, in case it change
@@ -72,6 +83,5 @@ GsFileStorageBehavior = ->
         @hotFiles = []
       else
         @hotFiles = @_parseJs(localStorageFiles)
- 
-  methods.initialize()
-  methods
+  _checkServiceInNameSpace()
+  window.GS.GSFILESTORAGE
