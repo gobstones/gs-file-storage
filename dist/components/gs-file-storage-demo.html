@@ -1,6 +1,6 @@
 <link rel="import" href="gs-file-storage.html">
 <link rel="import" href="gs-submit-file.html">
-<link rel="import" href="../../../gs-file-explorer/dist/components/gs-file-explorer.html">
+<link rel="import" href="gs-file.html">
 <dom-module id="gs-file-storage-demo">
   <template>
     <style>
@@ -14,16 +14,6 @@
         text-align: center;
         margin-top: 5vh;
         height: 10vh;
-      }
-
-      .fileExplorer {
-        padding: 10px;
-        width: 20vw;
-        height: 10vh;
-        background-color: #19A0CF;
-        display: table;
-        border-radius: 10px;
-        margin: 0 auto;
       }
 
       #submit ::content > * {
@@ -58,64 +48,77 @@
         width: 33vw;
       }
 
+      #disabledText {
+        margin-left: 15vw;
+        margin-top: 6.5vh;
+        width: 20vw;
+        height: 25vh;
+        border: 0;
+      }
+
       /*# sourceMappingURL=style.css.map */
 
     </style>
 
     <p id="demo-header">An example of <br> <code>&lt;gs-file-storage&gt;</code>:</p>
 
-    <div id="column-1">
-      
-      <gs-file-explorer class="fileExplorer" id="explorer-left" files={{files}}> </gs-file-explorer>
+      <div id="column-1">
+        
+        <textarea disabled id="disabledText"></textarea>
+            
+      </div>
 
-    </div>
+      <div id="column-2">
 
-    <div id="column-2">
-      
-      <gs-submit-file name-field={{fileDemo.name}} text-field={{fileDemo.content}} button-name="Save" id="submit"></gs-submit-file>
+        <gs-submit-file 
+          name-field={{fileDemo.data.name}} 
+          text-field={{fileDemo.data.content}} 
+          button-name="Save" 
+          id="submit">
+        </gs-submit-file>
 
-    </div >
+      </div >
 
+      <div  class="column-3" >
+        Change file content and see how the left textBox
+        show the changes.
 
-    <div id="column-3">
-      
-      <gs-file-explorer class="fileExplorer" id="explorer-right" files={{files}}> </gs-file-explorer>
-
-    </div>
-
-
-
-
+        Also refresh page and see last file content steel there.
+      </div>
   </template>
   <script>
     Polymer({
       is: 'gs-file-storage-demo',
-      properties: {
-        fileDemo: {
-          type: {},
-          notify: true
-        }
-      },
       listeners: {
         'openFile': 'openFile',
-        'saveFile': 'saveFile'
+        'submitFile': 'saveFile'
+      },
+      properties: {
+        fileContent: {
+          type: String
+        }
       },
       ready: function() {
-        var file;
-        this.storage = GsFileStorageBehavior();
-        file = {
-          name: "index.html",
-          content: "This is a html file",
-          syntax: "html"
-        };
-        this.storage.addFile(file);
-        return this.files = this.storage.getAllFiles();
-      },
-      openFile: function(polymerEvent) {
-        return this.set('fileDemo', this.storage.getFile(polymerEvent.detail.file.name));
+        window.localStorage.removeItem('gsFiles');
+        this.storage = GsFileStorage();
+        this.disabledText = this.$.disabledText;
+        this.fileDemo = this.storage.getFile("index.html");
+        return this.fileDemo.addEventListener('change', (function(_this) {
+          return function(event) {
+            var file;
+            file = event.target;
+            return _this.refreshTextContent(file.getContent());
+          };
+        })(this));
       },
       saveFile: function(polymerEvent) {
-        return this.storage.addFile(polymerEvent.detail.file);
+        var eventFile;
+        eventFile = polymerEvent.detail.file;
+        this.fileDemo.setContent(eventFile.content);
+        return this.fileDemo.saveIt();
+      },
+      refreshTextContent: function(text) {
+        return this.disabledText.value = text;
       }
     });
 

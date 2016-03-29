@@ -1,23 +1,25 @@
 <p id="demo-header">An example of <br> <code>&lt;gs-file-storage&gt;</code>:</p>
 
-<div id="column-1">
-  
-  <gs-file-explorer class="fileExplorer" id="explorer-left" files={{files}}> </gs-file-explorer>
+  <div id="column-1">
+    
+    <textarea disabled id="disabledText"></textarea>
+        
+  </div>
 
-</div>
+  <div id="column-2">
 
-<div id="column-2">
-  
-  <gs-submit-file name-field={{fileDemo.name}} text-field={{fileDemo.content}} button-name="Save" id="submit"></gs-submit-file>
+    <gs-submit-file 
+      name-field={{fileDemo.data.name}} 
+      text-field={{fileDemo.data.content}} 
+      button-name="Save" 
+      id="submit">
+    </gs-submit-file>
 
-</div >
+  </div >
 
+  <div  class="column-3" >
+    Change file content and see how the left textBox
+    show the changes.
 
-<div id="column-3">
-  
-  <gs-file-explorer class="fileExplorer" id="explorer-right" files={{files}}> </gs-file-explorer>
-
-</div>
-
-
-
+    Also refresh page and see last file content steel there.
+  </div>

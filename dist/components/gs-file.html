@@ -1,0 +1,74 @@
+<link rel="import" href="gs-custom-event-target.html">
+<dom-module id="gs-file">
+  <template>
+    <style>
+      
+
+      /*# sourceMappingURL=style.css.map */
+
+    </style>
+
+
+  </template>
+  <script>
+    var GSFILE;
+
+    GSFILE = (function() {
+      var constructor;
+      constructor = function(name) {
+        CustomEventTarget.apply(this);
+        this.data = {
+          name: name,
+          content: ""
+        };
+        this._storage = GsFileStorage();
+        this.saveIt = function() {
+          var saveFileError;
+          try {
+            this._storage.storageFile(this);
+          } catch (_error) {
+            saveFileError = _error;
+            console.log("" + saveFileError);
+          }
+          return this._fire("change");
+        };
+        this._fire = function(eventName) {
+          var evnt;
+          evnt = document.createEvent('CustomEvent');
+          evnt.initEvent(eventName, true, true);
+          return this.dispatchEvent(evnt);
+        };
+        this.removeIt = function() {
+          var removeFileError;
+          try {
+            this._storage.removeFile({
+              name: this.name
+            });
+          } catch (_error) {
+            removeFileError = _error;
+            console.log("" + removeFileError);
+          }
+          return this._fire("remove");
+        };
+        this.getName = function() {
+          return this.data.name;
+        };
+        this.getContent = function() {
+          return this.data.content;
+        };
+        this.setName = function(string) {
+          return this.data.name = string;
+        };
+        this.setContent = function(string) {
+          return this.data.content = string;
+        };
+        this.getData = function() {
+          return this.data;
+        };
+        return this;
+      };
+      return constructor;
+    })();
+
+  </script>
+</dom-module>

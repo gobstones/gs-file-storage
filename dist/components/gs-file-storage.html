@@ -8,20 +8,11 @@
     </style>
 
 
-    <template is="dom-repeat" items="{{toStorage}}" as="storageable">
-      
-      <iron-localstorage 
-        name="{{storageable.name}}" 
-        value="{{storageable}}">
-      </iron-localstorage>
-
-    </template>
-
   </template>
   <script>
-    var GsFileStorageBehavior;
+    var GsFileStorage;
 
-    GsFileStorageBehavior = function() {
+    GsFileStorage = function() {
       var methods, _checkServiceInNameSpace;
       _checkServiceInNameSpace = function() {
         window.GS = window.GS || {};
@@ -37,46 +28,60 @@
         _parseJs: function(string) {
           return JSON.parse(string);
         },
-        addFile: function(file) {
-          var exist, replaceIndex, storageFile, _i, _len, _ref;
-          exist = null;
-          if (this._fileNameValid(file.name)) {
-            console.log;
-            _ref = this.hotFiles;
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              storageFile = _ref[_i];
-              if (storageFile.name === file.name) {
-                exist = storageFile;
-                break;
-              }
-            }
-            if (exist) {
-              replaceIndex = this.hotFiles.indexOf(exist);
-              this.hotFiles[replaceIndex] = file;
-            } else {
-              this.hotFiles.push(file);
-            }
+        removeFile: function(fileName) {
+          var exist;
+          exist = this.hotFiles[fileName];
+          if (exist) {
+            delete this.hotFiles[fileName];
             return this.storage.setItem('gsFiles', this._strfy(this.hotFiles));
           } else {
-            throw "Invalid file name.";
+            throw "No sutch file with that name.";
           }
         },
         _fileNameValid: function(name) {
           return name !== void 0 && name.match(/[a-zA-Z]/) && name[0] !== " ";
         },
-        getFile: function(name) {
-          var storageFile, _i, _len, _ref;
-          _ref = this.hotFiles;
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            storageFile = _ref[_i];
-            if (storageFile.name === name) {
-              return storageFile;
+        getFile: function(fileName) {
+          var file, fileExist;
+          if (this._fileNameValid(fileName)) {
+            fileExist = this._fileExist(fileName);
+            if (fileExist) {
+              return fileExist;
+            } else {
+              file = new GSFILE(fileName);
+              this.storageFile(file);
+              return file;
             }
+          } else {
+            throw "Invalid file name.";
           }
-          throw "No sutch file with that name.";
         },
-        getAllFiles: function() {
-          return this.hotFiles;
+        storageFile: function(gsFile) {
+          var data;
+          this._changedFileList(gsFile.getName());
+          this.hotFiles[gsFile.getName()] = gsFile;
+          data = gsFile.getData();
+          return this.storage.setItem('gsFiles.' + gsFile.getName(), this._strfy(data));
+        },
+        _changedFileList: function(fileName) {
+          if (!this.hotFiles[fileName]) {
+            return console.log("lanzar el evento");
+          }
+        },
+        _fileExist: function(fileName) {
+          var existLS, file, fileExistJS, parsedFile;
+          fileExistJS = this.hotFiles[fileName];
+          if (fileExistJS) {
+            return fileExistJS;
+          }
+          existLS = this.storage.getItem('gsFiles.' + fileName);
+          if (existLS) {
+            parsedFile = this._parseJs(existLS);
+            file = new GSFILE(parsedFile.name);
+            file.setContent(parsedFile.content);
+            this.hotFiles[fileName] = file;
+            return file;
+          }
         },
         initialize: function() {
           var localStorageFiles;

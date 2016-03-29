@@ -1,17 +1,17 @@
-GsFileStorageBehavior = ->
+GsFileStorage = ->
+  
   # Service for managing localStorage files
   # use gsFiles as a key in localStorage
 
-  # Mehtod for check if nameSpace is created and
+  # Method for check if nameSpace is created and
   # service initialized.
   _checkServiceInNameSpace = ->
-    window.GS = window.GS || {}
+    window.GS = window.GS or {}
     window.GS.GSFILESTORAGE = 
-      window.GS.GSFILESTORAGE || 
+      window.GS.GSFILESTORAGE or 
       do -> 
         methods.initialize() 
         methods
-
 
   methods =
 
@@ -27,51 +27,75 @@ GsFileStorageBehavior = ->
     # @return: a javascript type structure
     _parseJs:(string)->
       JSON.parse(string)
-
-    # Add file to localStorage and to temporal list, replace if 
-    # exist a file.name equal to given. Also check
-    # repeated names files and validate name.
-    # @param {file}: an object with the attr name: "string" as minumun
-    # @return: void
-    # @except: file
-    addFile: (file)->
-      exist = null
-      if @_fileNameValid(file.name)
-        console.log
-        for storageFile in @hotFiles 
-          if storageFile.name is file.name
-            exist = storageFile
-            break
-        if exist
-          replaceIndex = @hotFiles.indexOf(exist)
-          @hotFiles[replaceIndex] = file
-          # tirar evento que cambio el archivo o lo que sea
-        else
-          @hotFiles.push(file)
+    
+    # Remove file from local storaga, by removing key map
+    # param {fileName}: a string corresponding to a file name
+    # exept: no exist a file with name = fileName
+    # return: void
+    removeFile:(fileName)->
+      exist = @hotFiles[fileName]
+      if exist
+        delete @hotFiles[fileName]
         @storage.setItem('gsFiles', @_strfy(@hotFiles))
       else
-        throw "Invalid file name."
-     
+        throw "No sutch file with that name."
+
     # Method to validate file name to store.
     # @param {name}: a string
     # @return: true or false if name is valid 
     _fileNameValid:(name)->
       (name isnt undefined and name.match(/[a-zA-Z]/) and name[0] isnt " ")
     
-    # Get a file stored.
+    # Get a file stored or create one.
     # @param {name}: a string
-    # @return: a file object
-    # @except: in case that no file stored have name = param name
-    getFile:(name)->
-      for storageFile in @hotFiles 
-        if storageFile.name is name
-          return storageFile
-      throw "No sutch file with that name."
+    # @return: a GSFILE
+    # @except: in case that fileName is invalid 
+    getFile:(fileName)->
+      if @_fileNameValid(fileName)
+        fileExist = @_fileExist(fileName)
+        if fileExist
+          return fileExist
+        else
+          file = new GSFILE(fileName)
+          @storageFile(file)
+          return file
+      else
+        throw "Invalid file name."
 
-    # Return all files stored in local Storage
-    # @return: a list of files
-    getAllFiles: ->
-      @hotFiles
+    # Save file in localStorage
+    # @param {gsfile}: a GSFile
+    # return: void
+    storageFile:(gsFile)->
+      @_changedFileList(gsFile.getName())
+      @hotFiles[gsFile.getName()] = gsFile
+      data = gsFile.getData()
+      @storage.setItem('gsFiles.' + gsFile.getName(), @_strfy(data))
+
+    # Check if hotFiles list changed and trigger a event
+    # @param {fileName}: string
+    # return: void
+    # trigger: listChangedEvent
+    _changedFileList:(fileName)->
+      if not @hotFiles[fileName]
+        console.log "lanzar el evento"
+        # triggerear el evento de actualizar la lista de archivos
+
+
+    # Check if file exist in localStorage or
+    # in hotFiles variable
+    # @param {fileName} string
+    # #return: a GSFile or null
+    _fileExist:(fileName)->
+      fileExistJS = @hotFiles[fileName]
+      if fileExistJS
+        return fileExistJS
+      existLS = @storage.getItem('gsFiles.' + fileName)
+      if existLS
+        parsedFile = @_parseJs(existLS)
+        file = new GSFILE(parsedFile.name)
+        file.setContent(parsedFile.content)
+        @hotFiles[fileName] = file
+        return file
 
     # Initialize service, need to be called before call any other method
     # create localStorage key 'gsFiles' in case it has no was created
@@ -83,5 +107,6 @@ GsFileStorageBehavior = ->
         @hotFiles = []
       else
         @hotFiles = @_parseJs(localStorageFiles)
+
   _checkServiceInNameSpace()
   window.GS.GSFILESTORAGE

@@ -1,12 +1,9 @@
-
-<input on-keypress="checkIfEnter" 
-  placeholder="name" 
+<input on-keypress="checkIfEnter"
   id="nameField" 
   type="text"
+  placeholder="File Name"
   value={{nameField}} />
 
-<textarea id="textField" text="content" value={{textField}}>
-  
-</textarea>
+<textarea placeholder="File Content" id="textField" value={{textField}}></textarea>
 
 <button on-tap="submitFields">{{buttonName}}</button>

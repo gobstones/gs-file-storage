@@ -7,16 +7,13 @@
 
     </style>
 
-
-    <input on-keypress="checkIfEnter" 
-      placeholder="name" 
+    <input on-keypress="checkIfEnter"
       id="nameField" 
       type="text"
+      placeholder="File Name"
       value={{nameField}} />
 
-    <textarea id="textField" text="content" value={{textField}}>
-      
-    </textarea>
+    <textarea placeholder="File Content" id="textField" value={{textField}}></textarea>
 
     <button on-tap="submitFields">{{buttonName}}</button>
   </template>
@@ -29,15 +26,14 @@
           value: "Submit"
         },
         nameField: {
-          type: String,
-          value: "sarasa"
+          type: String
         },
         textField: {
           type: String
         }
       },
       submitFields: function(event) {
-        return this.fire('saveFile', {
+        return this.fire('submitFile', {
           file: {
             name: this.$.nameField.value,
             content: this.$.textField.value

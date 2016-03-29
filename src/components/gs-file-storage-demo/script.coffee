@@ -1,33 +1,32 @@
 Polymer
   is: '#GRUNT_COMPONENT_NAME'
 
-  # --- Attemp to create several files and
-  # --- save them into localStorage with 
-  # --- gs-file-storage
-  
-  properties:
-    fileDemo:
-      type: {}
-      notify: true
-
   listeners:
     'openFile' : 'openFile'
-    'saveFile' : 'saveFile'
+    'submitFile' : 'saveFile'
+
+  properties:
+    fileContent:
+      type: String
 
   ready: ->
-    @storage = GsFileStorageBehavior()
-
-    file =
-      name: "index.html"
-      content: "This is a html file"
-      syntax: "html"
-   
-    @storage.addFile(file)
-
-    @files = @storage.getAllFiles()
-
-  openFile: (polymerEvent)->
-    @set('fileDemo',@storage.getFile(polymerEvent.detail.file.name))
+    window.localStorage.removeItem('gsFiles')
+    @storage = GsFileStorage()
+    @disabledText = @$.disabledText
+    
+    @fileDemo = @storage.getFile("index.html")
+    # When change triggered refresh content
+    @fileDemo.addEventListener('change', 
+      (event)=>
+        file = event.target
+        @refreshTextContent(file.getContent())
+    )
 
   saveFile: (polymerEvent)->
-    @storage.addFile(polymerEvent.detail.file)
+    eventFile = polymerEvent.detail.file
+    @fileDemo.setContent(eventFile.content)
+    # When file is saved trigger change event
+    @fileDemo.saveIt()
+
+  refreshTextContent:(text)->
+    @disabledText.value = text

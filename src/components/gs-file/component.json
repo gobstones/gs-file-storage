@@ -1,0 +1,4 @@
+{
+  "name": "gs-file",
+  "imports": ["gs-custom-event-target.html"]
+}

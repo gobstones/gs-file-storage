@@ -10,15 +10,7 @@
   height: 10vh;
 }
 
-.fileExplorer {
-  padding: 10px;
-  width: 20vw;
-  height: 10vh;
-  background-color: #19A0CF;
-  display: table;
-  border-radius: 10px;
-  margin: 0 auto;
-}
+
 
 #submit ::content > * {
   margin: 0 auto;
@@ -57,4 +49,12 @@
 #column-1, #column-2, #column-3 {
   float: left;
   width: 33vw;
+}
+
+#disabledText {
+  margin-left: 15vw;
+  margin-top: 6.5vh;
+  width: 20vw;
+  height: 25vh;
+  border: 0;
 }
