@@ -13,9 +13,14 @@ Polymer
     window.localStorage.removeItem('gsFiles')
     @storage = GsFileStorage()
     @disabledText = @$.disabledText
+    @storage.addEventListener('listchange', 
+      (event)->
+        console.log ("fired")
+    )
     
     @fileDemo = @storage.getFile("index.html")
     # When change triggered refresh content
+    
     @fileDemo.addEventListener('change', 
       (event)=>
         file = event.target

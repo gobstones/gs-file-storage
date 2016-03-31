@@ -16,31 +16,10 @@
         height: 10vh;
       }
 
-      #submit ::content > * {
-        margin: 0 auto;
-        margin-top: 10px;
-        margin-left: 18%;
-      }
-
-      #submit ::content input {
-        width: 20.3vw;
-        margin-top: 20px;
-        border: 0;
-      }
-      #submit ::content textarea {
-        width: 20vw;
-        height: 25vh;
-        margin-top: 10px;
-        border: 0;
-      }
-      #submit ::content button {
-        border-radius: 2px;
-        background-color: #E7E9EE;
-        color: black;
-      }
-      #submit ::content button:hover {
-        background-color: #E70126;
-        border-color: #E70126;
+      #submit {
+        display: block;
+        margin: 97px;
+        margin-top: 16vh;
       }
 
       #column-1, #column-2, #column-3 {
@@ -54,6 +33,15 @@
         width: 20vw;
         height: 25vh;
         border: 0;
+        font-size: 1.6em;
+      }
+
+      .demoToolTip {
+        font-size: 2em;
+        color: white;
+        padding: 20px;
+        padding-left: 0;
+        margin-top: 4vh;
       }
 
       /*# sourceMappingURL=style.css.map */
@@ -63,14 +51,14 @@
     <p id="demo-header">An example of <br> <code>&lt;gs-file-storage&gt;</code>:</p>
 
       <div id="column-1">
-        
+        <label> File change event listener. </label>
         <textarea disabled id="disabledText"></textarea>
             
       </div>
 
       <div id="column-2">
-
-        <gs-submit-file 
+        <gs-submit-file
+          label="File name and content edit."
           name-field={{fileDemo.data.name}} 
           text-field={{fileDemo.data.content}} 
           button-name="Save" 
@@ -80,10 +68,14 @@
       </div >
 
       <div  class="column-3" >
-        Change file content and see how the left textBox
-        show the changes.
-
-        Also refresh page and see last file content steel there.
+        <div class="demoToolTip" >
+          <li>Change file content and see how the left textBox
+          show the changes.
+          </li>
+          <li>
+          Also refresh page and see last file content steel there.
+          </li>
+        <div>
       </div>
   </template>
   <script>
@@ -102,6 +94,9 @@
         window.localStorage.removeItem('gsFiles');
         this.storage = GsFileStorage();
         this.disabledText = this.$.disabledText;
+        this.storage.addEventListener('listchange', function(event) {
+          return console.log("fired");
+        });
         this.fileDemo = this.storage.getFile("index.html");
         return this.fileDemo.addEventListener('change', (function(_this) {
           return function(event) {

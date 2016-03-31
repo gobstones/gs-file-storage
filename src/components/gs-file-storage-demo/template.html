@@ -1,14 +1,14 @@
 <p id="demo-header">An example of <br> <code>&lt;gs-file-storage&gt;</code>:</p>
 
   <div id="column-1">
-    
+    <label> File change event listener. </label>
     <textarea disabled id="disabledText"></textarea>
         
   </div>
 
   <div id="column-2">
-
-    <gs-submit-file 
+    <gs-submit-file
+      label="File name and content edit."
       name-field={{fileDemo.data.name}} 
       text-field={{fileDemo.data.content}} 
       button-name="Save" 
@@ -18,8 +18,12 @@
   </div >
 
   <div  class="column-3" >
-    Change file content and see how the left textBox
-    show the changes.
-
-    Also refresh page and see last file content steel there.
+    <div class="demoToolTip" >
+      <li>Change file content and see how the left textBox
+      show the changes.
+      </li>
+      <li>
+      Also refresh page and see last file content steel there.
+      </li>
+    <div>
   </div>

@@ -14,20 +14,20 @@ GsFileStorage = ->
         methods
 
   methods =
-
+    
     # Method for no use Json api, in case it change
     # @param {item}: any Object
-    # @return:object received converted to String 
+    # @return:object received converted to string
     _strfy:(item)->
       JSON.stringify(item)
     
-    # Method for no use Json api, in case it change.
+    # Method to no use Json api, in case it change.
     # @param {string}: a string with json form parsable to
     # jsvascript type object
     # @return: a javascript type structure
     _parseJs:(string)->
       JSON.parse(string)
-    
+
     # Remove file from local storaga, by removing key map
     # param {fileName}: a string corresponding to a file name
     # exept: no exist a file with name = fileName
@@ -77,9 +77,16 @@ GsFileStorage = ->
     # trigger: listChangedEvent
     _changedFileList:(fileName)->
       if not @hotFiles[fileName]
-        console.log "lanzar el evento"
-        # triggerear el evento de actualizar la lista de archivos
+        @_fire("listchange")
+        console.log @actions['listchange']
 
+    # Trigger event using distpatchEvent of custom event target
+    # param {eventName}: string, event Name
+    # return: void
+    _fire: (eventName)->
+      evnt = document.createEvent('CustomEvent')
+      evnt.initEvent eventName, true, true
+      @dispatchEvent(evnt)
 
     # Check if file exist in localStorage or
     # in hotFiles variable
@@ -100,10 +107,10 @@ GsFileStorage = ->
     # Initialize service, need to be called before call any other method
     # create localStorage key 'gsFiles' in case it has no was created
     initialize: ->
+      CustomEventTarget.apply @
       @storage = window.localStorage
       localStorageFiles = @storage.getItem('gsFiles')
       if (localStorageFiles is undefined ) or (localStorageFiles is null)
-        @storage.setItem('gsFiles', '[]')
         @hotFiles = []
       else
         @hotFiles = @_parseJs(localStorageFiles)

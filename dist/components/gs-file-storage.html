@@ -1,3 +1,4 @@
+<link rel="import" href="gs-custom-event-target.html">
 <dom-module id="gs-file-storage">
   <template>
     <style>
@@ -65,8 +66,15 @@
         },
         _changedFileList: function(fileName) {
           if (!this.hotFiles[fileName]) {
-            return console.log("lanzar el evento");
+            this._fire("listchange");
+            return console.log(this.actions['listchange']);
           }
+        },
+        _fire: function(eventName) {
+          var evnt;
+          evnt = document.createEvent('CustomEvent');
+          evnt.initEvent(eventName, true, true);
+          return this.dispatchEvent(evnt);
         },
         _fileExist: function(fileName) {
           var existLS, file, fileExistJS, parsedFile;
@@ -85,10 +93,10 @@
         },
         initialize: function() {
           var localStorageFiles;
+          CustomEventTarget.apply(this);
           this.storage = window.localStorage;
           localStorageFiles = this.storage.getItem('gsFiles');
           if ((localStorageFiles === void 0) || (localStorageFiles === null)) {
-            this.storage.setItem('gsFiles', '[]');
             return this.hotFiles = [];
           } else {
             return this.hotFiles = this._parseJs(localStorageFiles);

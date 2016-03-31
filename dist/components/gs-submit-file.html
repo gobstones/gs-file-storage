@@ -1,11 +1,111 @@
 <dom-module id="gs-submit-file">
   <template>
     <style>
-      
+      #inputLabel, nameField::-webkit-input-placeholder, #submitButton {
+        font-family: 'roboto', sans-serif;
+        transition: all 0.3s ease-in-out;
+      }
+
+      :host {
+        box-sizing: border-box;
+        box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.2);
+        padding-bottom: 2vh;
+        border-radius: 3px;
+        background-color: white;
+        padding-top: 5vh;
+        width: 20.3vw;
+        height: 30vh;
+      }
+
+      #nameField {
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 30px;
+        margin-top: 4vh;
+        width: 15vw;
+        display: block;
+        border: none;
+        padding: 10px 0;
+        border-bottom: solid 1px #1abc9c;
+        transition: all 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 96%, #1abc9c 4%);
+        background-position: -15vw 0;
+        background-size: 15vw 100%;
+        background-repeat: no-repeat;
+        color: #0e6252;
+      }
+      #nameField:focus, #nameField:valid {
+        box-shadow: none;
+        outline: none;
+        background-position: 0 0;
+      }
+      #nameField:focus::-webkit-input-placeholder, #nameField:valid::-webkit-input-placeholder {
+        color: #1abc9c;
+        font-size: 11px;
+        -webkit-transform: translateY(-20px);
+        transform: translateY(-20px);
+        visibility: visible !important;
+      }
+
+      #submitButton {
+        border: none;
+        background: #1abc9c;
+        cursor: pointer;
+        border-radius: 3px;
+        padding: 6px;
+        width: 15vw;
+        color: white;
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+        box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2);
+        font-size: 2vh;
+      }
+      #submitButton:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 6px 0 rgba(0, 0, 0, 0.2);
+      }
+
+      #inputLabel {
+        box-sizing: border-box;
+        padding: 20px;
+        height: 12vh;
+        width: 100%;
+        font-size: 2.5vh;
+        background: #18aa8d;
+        color: white;
+        line-height: 150%;
+        border-radius: 3px 3px 0 0;
+        box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
+        margin-top: -16.8vh;
+      }
+
+      #textField {
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 30px;
+        margin-top: 4vh;
+        width: 15vw;
+        display: block;
+        border: none;
+        padding: 10px 0;
+        border-bottom: solid 1px #1abc9c;
+        transition: all 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 96%, #1abc9c 4%);
+        background-position: -15vw 0;
+        background-size: 15vw 100%;
+        background-repeat: no-repeat;
+        color: #0e6252;
+        resize: none;
+      }
 
       /*# sourceMappingURL=style.css.map */
 
     </style>
+
+    <template is='dom-if' if="{{label}}">
+      <h1 id="inputLabel">{{label}}</h1>
+    </template>
 
     <input on-keypress="checkIfEnter"
       id="nameField" 
@@ -15,7 +115,7 @@
 
     <textarea placeholder="File Content" id="textField" value={{textField}}></textarea>
 
-    <button on-tap="submitFields">{{buttonName}}</button>
+    <button id="submitButton" on-tap="submitFields">{{buttonName}}</button>
   </template>
   <script>
     Polymer({
