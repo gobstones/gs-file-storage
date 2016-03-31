@@ -2,12 +2,15 @@
   <h1 id="inputLabel">{{label}}</h1>
 </template>
 
-<input on-keypress="checkIfEnter"
-  id="nameField" 
-  type="text"
-  placeholder="File Name"
-  value={{nameField}} />
+<div class="formContent">
+  <input on-keypress="checkIfEnter"
+    id="nameField" 
+    type="text"
+    placeholder="File Name"
+    value={{nameField}} />
 
-<textarea placeholder="File Content" id="textField" value={{textField}}></textarea>
+  <textarea placeholder="File Content" id="textField" value={{textField}}></textarea>
 
-<button id="submitButton" on-tap="submitFields">{{buttonName}}</button>
+  <button id="submitButton" on-tap="submitFields">{{buttonName}}</button>
+
+</div>
