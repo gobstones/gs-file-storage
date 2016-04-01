@@ -104,6 +104,19 @@ GsFileStorage = ->
         @hotFiles[fileName] = file
         return file
 
+    getAllFilesName:->
+      @_allStorage()
+
+    _allStorage:->
+      values = []
+      keys = Object.keys(@storage)
+      i = keys.length
+
+      while ( i-- )
+        values.push( window.localStorage.getItem(keys[i]) )
+      
+      return values
+
     # Initialize service, need to be called before call any other method
     # create localStorage key 'gsFiles' in case it has no was created
     initialize: ->

@@ -1,6 +1,7 @@
 <link rel="import" href="gs-file-storage.html">
 <link rel="import" href="gs-submit-file.html">
 <link rel="import" href="gs-file.html">
+<link rel="import" href="../../../gs-file-explorer/dist/components/gs-file-explorer.html">
 <dom-module id="gs-file-storage-demo">
   <template>
     <style>
@@ -8,7 +9,7 @@
         margin: 0 auto;
         background-color: #E70126;
         display: table;
-        font-size: 1.5em;
+        font-size: 4vh;
         border-radius: 5px;
         width: 40vw;
         text-align: center;
@@ -18,30 +19,65 @@
 
       #submit {
         display: block;
-        margin: 97px;
-        margin-top: 16vh;
+        margin: 6vw;
+        margin-top: 4vh;
       }
 
-      #column-1, #column-2, #column-3 {
+      #column-1, #column-2 {
         float: left;
         width: 33vw;
       }
 
+      #column-3 {
+        float: left;
+        width: 32vw;
+      }
+
       #disabledText {
-        margin-left: 15vw;
-        margin-top: 6.5vh;
-        width: 20vw;
+        margin: 0 auto;
+        display: block;
+        width: 20.4vw;
         height: 25vh;
-        border: 0;
-        font-size: 1.6em;
+        box-sizing: border-box;
+        box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.2);
+        padding-bottom: 2vh;
+        border-radius: 3px;
+        background-color: white;
+        padding-top: 2vh;
+        font-size: 3vh;
       }
 
       .demoToolTip {
-        font-size: 2em;
         color: white;
+        box-sizing: border-box;
+        background: #d30123;
+        border-radius: 3px 3px 0 0;
+        box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
+        margin: 0 auto;
+        display: block;
         padding: 20px;
-        padding-left: 0;
         margin-top: 4vh;
+        height: 25vh;
+        width: 100%;
+        float: left;
+        font-size: 2.8vh;
+        font-weight: bold;
+      }
+
+      #disabledLabel {
+        color: white;
+        box-sizing: border-box;
+        background: #d30123;
+        border-radius: 3px 3px 0 0;
+        box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
+        margin: 0 auto;
+        display: block;
+        margin-top: 4vh;
+        padding: 20px;
+        height: 12vh;
+        width: 20.5vw;
+        font-size: 2.5vh;
+        line-height: 150%;
       }
 
       /*# sourceMappingURL=style.css.map */
@@ -51,7 +87,7 @@
     <p id="demo-header">An example of <br> <code>&lt;gs-file-storage&gt;</code>:</p>
 
       <div id="column-1">
-        <label> File change event listener. </label>
+        <h1 id="disabledLabel"> File change event listener. </h1>
         <textarea disabled id="disabledText"></textarea>
             
       </div>
@@ -67,7 +103,7 @@
 
       </div >
 
-      <div  class="column-3" >
+      <div id="column-3" >
         <div class="demoToolTip" >
           <li>Change file content and see how the left textBox
           show the changes.
@@ -76,6 +112,14 @@
           Also refresh page and see last file content steel there.
           </li>
         <div>
+      </div>
+
+      <div id="column-1">
+
+        <gs-file-explorer files="fileses"> 
+
+        </gs-file-explorer>
+        
       </div>
   </template>
   <script>
@@ -88,15 +132,28 @@
       properties: {
         fileContent: {
           type: String
+        },
+        fileses: {
+          type: [],
+          value: []
         }
       },
       ready: function() {
         window.localStorage.removeItem('gsFiles');
         this.storage = GsFileStorage();
         this.disabledText = this.$.disabledText;
-        this.storage.addEventListener('listchange', function(event) {
-          return console.log("fired");
-        });
+        this.fileses = [
+          {
+            name: "sarasa",
+            content: ""
+          }
+        ];
+        this.makeFilesForFileExplorer(this.storage.getAllFilesName());
+        this.storage.addEventListener('listchange', (function(_this) {
+          return function(event) {
+            return _this.makeFilesForFileExplorer(_this.storage.getAllFilesName());
+          };
+        })(this));
         this.fileDemo = this.storage.getFile("index.html");
         return this.fileDemo.addEventListener('change', (function(_this) {
           return function(event) {
@@ -114,6 +171,20 @@
       },
       refreshTextContent: function(text) {
         return this.disabledText.value = text;
+      },
+      makeFilesForFileExplorer: function(filesNamesList) {
+        var fName, filesNames, _i, _len, _results;
+        filesNames = filesNamesList;
+        this.files = [];
+        _results = [];
+        for (_i = 0, _len = filesNames.length; _i < _len; _i++) {
+          fName = filesNames[_i];
+          _results.push(this.files.push({
+            name: fName,
+            content: ""
+          }));
+        }
+        return _results;
       }
     });
 

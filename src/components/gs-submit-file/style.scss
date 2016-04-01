@@ -1,4 +1,4 @@
-$color: #1abc9c;
+$color: #E70126;
 
 #inputLabel, nameField::-webkit-input-placeholder, #submitButton {
   font-family: 'roboto', sans-serif;
@@ -19,8 +19,8 @@ $color: #1abc9c;
 #nameField {
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 30px;
-  margin-top: 4vh;
+  margin-bottom: 3vh;
+  margin-top: 2vh;
   width: 15vw;
   display: block;
   border: none;
@@ -52,9 +52,9 @@ $color: #1abc9c;
   background: $color;
   cursor: pointer;
   border-radius: 3px;
-  padding: 6px;
   width: 15vw;
   color: white;
+  height: 4vh;
   margin-left: auto;
   margin-right: auto;
   display: block;

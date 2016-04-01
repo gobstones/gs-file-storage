@@ -3,6 +3,7 @@
   "imports": [
     "gs-file-storage.html",
     "gs-submit-file.html",
-    "gs-file.html"
+    "gs-file.html",
+    "../../../gs-file-explorer/dist/components/gs-file-explorer.html"
   ]
 }

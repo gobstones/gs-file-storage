@@ -91,6 +91,19 @@
             return file;
           }
         },
+        getAllFilesName: function() {
+          return this._allStorage();
+        },
+        _allStorage: function() {
+          var i, keys, values;
+          values = [];
+          keys = Object.keys(this.storage);
+          i = keys.length;
+          while (i--) {
+            values.push(window.localStorage.getItem(keys[i]));
+          }
+          return values;
+        },
         initialize: function() {
           var localStorageFiles;
           CustomEventTarget.apply(this);

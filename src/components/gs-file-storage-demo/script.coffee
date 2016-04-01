@@ -8,19 +8,26 @@ Polymer
   properties:
     fileContent:
       type: String
+    fileses:
+      type: []
+      value: []
 
   ready: ->
     window.localStorage.removeItem('gsFiles')
     @storage = GsFileStorage()
     @disabledText = @$.disabledText
+    @fileses = [{name: "sarasa", content: ""}]
+    @makeFilesForFileExplorer(@storage.getAllFilesName())
+
+    # When list change triggered refresh fileList
     @storage.addEventListener('listchange', 
-      (event)->
-        console.log ("fired")
+      (event)=>
+        @makeFilesForFileExplorer(@storage.getAllFilesName())
     )
     
     @fileDemo = @storage.getFile("index.html")
-    # When change triggered refresh content
     
+    # When change triggered refresh content
     @fileDemo.addEventListener('change', 
       (event)=>
         file = event.target
@@ -35,3 +42,12 @@ Polymer
 
   refreshTextContent:(text)->
     @disabledText.value = text
+
+  makeFilesForFileExplorer: (filesNamesList)->
+    filesNames = filesNamesList
+    @files = []
+    for fName in filesNames
+      @files.push(
+        name: fName 
+        content: ""
+      )

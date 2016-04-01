@@ -1,8 +1,23 @@
+$color: #E70126;
+
+@mixin materialDesign() {
+  color: white;
+  box-sizing: border-box;
+  background: darken($color, 4%);
+  border-radius: 3px 3px 0 0;
+  box-shadow: 0 2px 5px 1px rgba(0,0,0,0.2);
+}
+
+@mixin centerDiv() {
+  margin: 0 auto;
+  display: block;
+}
+
 #demo-header {
   margin: 0 auto;
   background-color: #E70126;
   display: table;
-  font-size: 1.5em;
+  font-size: 4vh;
   border-radius: 5px;
   width: 40vw;
   text-align: center;
@@ -11,31 +26,58 @@
 }
 
 #submit {
-  // width: 20.3vw;
-  // height: 30vh;
   display: block;
-  margin: 97px;
-  margin-top: 16vh;
+  margin: 6vw;
+  margin-top: 4vh;
+  
 }
 
-#column-1, #column-2, #column-3 {
+#column-1, #column-2 {
   float: left;
   width: 33vw;
 }
 
+#column-3 {
+  float: left;
+  width: 32vw;
+}
+
 #disabledText {
-  margin-left: 15vw;
-  margin-top: 6.5vh;
-  width: 20vw;
+  @include centerDiv();
+  width: 20.4vw;
   height: 25vh;
-  border: 0;
-  font-size: 1.6em;
+  box-sizing: border-box;
+  box-shadow: 2px 2px 5px 1px rgba(0,0,0,0.2);
+  padding-bottom: 2vh;
+  border-radius: 3px;
+  background-color: white;
+  padding-top: 2vh;
+  font-size: 3vh;
+  
 }
 
 .demoToolTip {
-  font-size: 2em;
-  color: white;
+  @include materialDesign();
+  @include centerDiv();
   padding: 20px;
-  padding-left: 0;
   margin-top: 4vh;
+  height: 25vh;
+  width: 100%;
+  float: left;
+  font-size: 2.8vh;
+  font-weight: bold;
+  
+}
+
+
+
+#disabledLabel {
+  @include materialDesign();
+  @include centerDiv();
+  margin-top: 4vh;
+  padding: 20px;
+  height: 12vh;
+  width: 20.5vw;
+  font-size: 2.5vh;
+  line-height: 150%;
 }
