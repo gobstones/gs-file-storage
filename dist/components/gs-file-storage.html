@@ -95,14 +95,21 @@
           return this._allStorage();
         },
         _allStorage: function() {
-          var i, keys, values;
-          values = [];
+          var key, keys, storagedKey, _i, _len;
           keys = Object.keys(this.storage);
-          i = keys.length;
-          while (i--) {
-            values.push(window.localStorage.getItem(keys[i]));
+          console.log(keys);
+          storagedKey = [];
+          for (_i = 0, _len = keys.length; _i < _len; _i++) {
+            key = keys[_i];
+            if (key.lastIndexOf('gsFiles.', 0) === 0) {
+              console.log(key.lastIndexOf('gsFiles.', 0));
+              console.log(key);
+              console.log(key.replace('gsFiles.', ""));
+              storagedKey.push(key.replace('gsFiles.', ""));
+            }
           }
-          return values;
+          console.log(storagedKey);
+          return storagedKey;
         },
         initialize: function() {
           var localStorageFiles;

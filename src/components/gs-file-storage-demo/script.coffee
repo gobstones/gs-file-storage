@@ -8,7 +8,7 @@ Polymer
   properties:
     fileContent:
       type: String
-    fileses:
+    files:
       type: []
       value: []
 
@@ -16,7 +16,6 @@ Polymer
     window.localStorage.removeItem('gsFiles')
     @storage = GsFileStorage()
     @disabledText = @$.disabledText
-    @fileses = [{name: "sarasa", content: ""}]
     @makeFilesForFileExplorer(@storage.getAllFilesName())
 
     # When list change triggered refresh fileList
@@ -47,7 +46,9 @@ Polymer
     filesNames = filesNamesList
     @files = []
     for fName in filesNames
-      @files.push(
+      console.log fName
+      @push('files',
         name: fName 
         content: ""
       )
+

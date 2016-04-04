@@ -1,6 +1,12 @@
 <dom-module id="gs-submit-file">
   <template>
     <style>
+      :host ::content {
+        margin: 0 auto;
+        display: block;
+        clear: both;
+      }
+
       #inputLabel, nameField::-webkit-input-placeholder, #submitButton {
         font-family: 'roboto', sans-serif;
         transition: all 0.3s ease-in-out;
@@ -13,8 +19,8 @@
         border-radius: 3px;
         background-color: white;
         padding-top: 2vh;
-        width: 20.3vw;
-        height: 35vh;
+        width: 200px;
+        height: 220px;
       }
 
       #nameField {
@@ -22,7 +28,7 @@
         margin-right: auto;
         margin-bottom: 3vh;
         margin-top: 2vh;
-        width: 15vw;
+        width: 160px;
         display: block;
         border: none;
         padding: 10px 0;
@@ -52,14 +58,14 @@
         background: #E70126;
         cursor: pointer;
         border-radius: 3px;
-        width: 15vw;
+        width: 130px;
         color: white;
-        height: 4vh;
+        height: 22px;
         margin-left: auto;
         margin-right: auto;
         display: block;
         box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2);
-        font-size: 2vh;
+        font-size: 0.8em;
       }
       #submitButton:hover {
         transform: translateY(-3px);
@@ -69,22 +75,24 @@
       #inputLabel {
         box-sizing: border-box;
         padding: 20px;
-        height: 12vh;
-        width: 20.4vw;
-        font-size: 2.5vh;
+        height: 80px;
+        width: 200px;
+        font-size: 1em;
         background: #d30123;
         color: white;
         line-height: 150%;
         border-radius: 3px 3px 0 0;
         box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
         margin-bottom: -3px;
+        border-top-left-radius: 0px;
+        border-top-right-radius: 0px;
       }
 
       #textField {
         margin-left: auto;
         margin-right: auto;
         margin-bottom: 30px;
-        width: 15vw;
+        width: 160px;
         display: block;
         border: none;
         padding: 10px 0;

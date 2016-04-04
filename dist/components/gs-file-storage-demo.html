@@ -17,27 +17,22 @@
         height: 10vh;
       }
 
-      #submit {
+      .submitFileForm {
         display: block;
-        margin: 6vw;
         margin-top: 4vh;
+        width: 200px;
       }
 
-      #column-1, #column-2 {
-        float: left;
-        width: 33vw;
-      }
-
-      #column-3 {
-        float: left;
-        width: 32vw;
+      .column {
+        margin: 0 auto;
+        display: table;
       }
 
       #disabledText {
         margin: 0 auto;
         display: block;
-        width: 20.4vw;
-        height: 25vh;
+        width: 200px;
+        height: 180px;
         box-sizing: border-box;
         box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.2);
         padding-bottom: 2vh;
@@ -45,23 +40,12 @@
         background-color: white;
         padding-top: 2vh;
         font-size: 3vh;
-      }
-
-      .demoToolTip {
-        color: white;
-        box-sizing: border-box;
-        background: #d30123;
-        border-radius: 3px 3px 0 0;
-        box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
-        margin: 0 auto;
-        display: block;
-        padding: 20px;
-        margin-top: 4vh;
-        height: 25vh;
-        width: 100%;
-        float: left;
-        font-size: 2.8vh;
-        font-weight: bold;
+        border-top-left-radius: 0px;
+        border-top-right-radius: 0px;
+        border: none;
+        border-style: none;
+        border-color: Transparent;
+        overflow: auto;
       }
 
       #disabledLabel {
@@ -74,53 +58,181 @@
         display: block;
         margin-top: 4vh;
         padding: 20px;
-        height: 12vh;
-        width: 20.5vw;
-        font-size: 2.5vh;
+        height: 80px;
+        width: 200px;
+        font-size: 1em;
         line-height: 150%;
+      }
+
+      .demoToolTip {
+        color: white;
+        box-sizing: border-box;
+        background: #d30123;
+        border-radius: 3px 3px 0 0;
+        box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
+        margin: 0 auto;
+        display: block;
+        padding: 20px;
+        margin-top: 4vh;
+        height: 180px;
+        width: 90%;
+        font-size: 1em;
+        font-weight: bold;
+      }
+
+      .line-row {
+        width: 100%;
+        float: left;
+      }
+
+      #file-explorer {
+        color: white;
+        box-sizing: border-box;
+        background: #d30123;
+        border-radius: 3px 3px 0 0;
+        box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
+        margin: 0 auto;
+        display: block;
+        width: 200px;
+        height: 25vh;
+        padding: 15px;
+        font-size: 4vh;
+        margin-bottom: 4vh;
+        margin-top: 4vh;
+        color: black;
+      }
+
+      /*  SECTIONS  */
+      .section {
+        clear: both;
+        padding: 0px;
+        margin: 0px;
+      }
+
+      /*  COLUMN SETUP  */
+      .col {
+        display: block;
+        float: left;
+        margin: 1% 0 1% 0;
+      }
+
+      .col:first-child {
+        margin-left: 0;
+      }
+
+      /*  GROUPING  */
+      .group:before,
+      .group:after {
+        content: "";
+        display: table;
+      }
+
+      .group:after {
+        clear: both;
+      }
+
+      .group {
+        zoom: 1;
+        /* For IE 6/7 */
+      }
+
+      /*  GRID OF THREE  */
+      .span_3_of_3 {
+        width: 33.33333333%;
+      }
+
+      .span_2_of_3 {
+        width: 33.33333333%;
+      }
+
+      .span_1_of_3 {
+        width: 33.33333333%;
+      }
+
+      /*  GO FULL WIDTH AT LESS THAN 480 PIXELS */
+      @media only screen and (max-width: 611px) {
+        .col {
+          margin: 1% 0 1% 0%;
+        }
+
+        .span_3_of_3, .span_2_of_3, .span_1_of_3 {
+          width: 100%;
+        }
       }
 
       /*# sourceMappingURL=style.css.map */
 
     </style>
 
+
+
     <p id="demo-header">An example of <br> <code>&lt;gs-file-storage&gt;</code>:</p>
 
-      <div id="column-1">
-        <h1 id="disabledLabel"> File change event listener. </h1>
-        <textarea disabled id="disabledText"></textarea>
-            
-      </div>
+    <div class="section group">
 
-      <div id="column-2">
-        <gs-submit-file
-          label="File name and content edit."
-          name-field={{fileDemo.data.name}} 
-          text-field={{fileDemo.data.content}} 
-          button-name="Save" 
-          id="submit">
-        </gs-submit-file>
+        <div class="col span_1_of_3">
+          <h1 id="disabledLabel"> File change event listener. </h1>
+          <textarea disabled id="disabledText"></textarea>
+              
+        </div>
 
-      </div >
+        <div class="col span_2_of_3">
+          <div class="demoToolTip" >
+            <li>Change file content and see how the left textBox
+            show the changes.
+            </li>
+            <li>
+            Also refresh page and see last file content steel there.
+            </li>
+          </div>
 
-      <div id="column-3" >
-        <div class="demoToolTip" >
-          <li>Change file content and see how the left textBox
-          show the changes.
-          </li>
-          <li>
-          Also refresh page and see last file content steel there.
-          </li>
-        <div>
-      </div>
+        </div >
 
-      <div id="column-1">
-
-        <gs-file-explorer files="fileses"> 
-
-        </gs-file-explorer>
+        <div class="col span_3_of_3" >
+          
+          <gs-submit-file
+            label="File name and content edit."
+            name-field={{fileDemo.data.name}} 
+            text-field={{fileDemo.data.content}} 
+            button-name="Save" 
+            id="submit"
+            class="submitFileForm">
+          </gs-submit-file>
         
-      </div>
+        </div>
+
+
+    </div>
+    <div class="section group">
+        
+        <div class="col span_1_of_3">
+            <gs-file-explorer id="file-explorer" files="{{files}}"> 
+              
+            </gs-file-explorer>
+            
+        </div>
+
+        <div class="col span_2_of_3">
+            
+            <gs-submit-file
+              label="Create a new file"
+              name-field= 
+              text-field= 
+              button-name="Save" 
+              class="submitFileForm">
+            </gs-submit-file>
+
+          </div >
+
+        <div class="col span_3_of_3">
+          
+
+        </div>
+
+
+    </div>
+          
+
   </template>
   <script>
     Polymer({
@@ -133,7 +245,7 @@
         fileContent: {
           type: String
         },
-        fileses: {
+        files: {
           type: [],
           value: []
         }
@@ -142,12 +254,6 @@
         window.localStorage.removeItem('gsFiles');
         this.storage = GsFileStorage();
         this.disabledText = this.$.disabledText;
-        this.fileses = [
-          {
-            name: "sarasa",
-            content: ""
-          }
-        ];
         this.makeFilesForFileExplorer(this.storage.getAllFilesName());
         this.storage.addEventListener('listchange', (function(_this) {
           return function(event) {
@@ -179,7 +285,8 @@
         _results = [];
         for (_i = 0, _len = filesNames.length; _i < _len; _i++) {
           fName = filesNames[_i];
-          _results.push(this.files.push({
+          console.log(fName);
+          _results.push(this.push('files', {
             name: fName,
             content: ""
           }));

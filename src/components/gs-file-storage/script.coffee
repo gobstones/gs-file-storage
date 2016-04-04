@@ -108,15 +108,19 @@ GsFileStorage = ->
       @_allStorage()
 
     _allStorage:->
-      values = []
       keys = Object.keys(@storage)
-      i = keys.length
-
-      while ( i-- )
-        values.push( window.localStorage.getItem(keys[i]) )
+      console.log keys
       
-      return values
-
+      storagedKey = []
+      for key in keys
+        if key.lastIndexOf('gsFiles.', 0) is 0
+          console.log key.lastIndexOf('gsFiles.', 0)
+          console.log key
+          console.log key.replace('gsFiles.', "")
+          storagedKey.push(key.replace('gsFiles.', ""))
+      console.log storagedKey
+      return storagedKey
+    
     # Initialize service, need to be called before call any other method
     # create localStorage key 'gsFiles' in case it has no was created
     initialize: ->

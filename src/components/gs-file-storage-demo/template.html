@@ -1,37 +1,68 @@
+
+
 <p id="demo-header">An example of <br> <code>&lt;gs-file-storage&gt;</code>:</p>
 
-  <div id="column-1">
-    <h1 id="disabledLabel"> File change event listener. </h1>
-    <textarea disabled id="disabledText"></textarea>
-        
-  </div>
+<div class="section group">
 
-  <div id="column-2">
-    <gs-submit-file
-      label="File name and content edit."
-      name-field={{fileDemo.data.name}} 
-      text-field={{fileDemo.data.content}} 
-      button-name="Save" 
-      id="submit">
-    </gs-submit-file>
+    <div class="col span_1_of_3">
+      <h1 id="disabledLabel"> File change event listener. </h1>
+      <textarea disabled id="disabledText"></textarea>
+          
+    </div>
 
-  </div >
+    <div class="col span_2_of_3">
+      <div class="demoToolTip" >
+        <li>Change file content and see how the left textBox
+        show the changes.
+        </li>
+        <li>
+        Also refresh page and see last file content steel there.
+        </li>
+      </div>
 
-  <div id="column-3" >
-    <div class="demoToolTip" >
-      <li>Change file content and see how the left textBox
-      show the changes.
-      </li>
-      <li>
-      Also refresh page and see last file content steel there.
-      </li>
-    <div>
-  </div>
+    </div >
 
-  <div id="column-1">
-
-    <gs-file-explorer files="fileses"> 
-
-    </gs-file-explorer>
+    <div class="col span_3_of_3" >
+      
+      <gs-submit-file
+        label="File name and content edit."
+        name-field={{fileDemo.data.name}} 
+        text-field={{fileDemo.data.content}} 
+        button-name="Save" 
+        id="submit"
+        class="submitFileForm">
+      </gs-submit-file>
     
-  </div>
+    </div>
+
+
+</div>
+<div class="section group">
+    
+    <div class="col span_1_of_3">
+        <gs-file-explorer id="file-explorer" files="{{files}}"> 
+          
+        </gs-file-explorer>
+        
+    </div>
+
+    <div class="col span_2_of_3">
+        
+        <gs-submit-file
+          label="Create a new file"
+          name-field= 
+          text-field= 
+          button-name="Save" 
+          class="submitFileForm">
+        </gs-submit-file>
+
+      </div >
+
+    <div class="col span_3_of_3">
+      
+
+    </div>
+
+
+</div>
+      
