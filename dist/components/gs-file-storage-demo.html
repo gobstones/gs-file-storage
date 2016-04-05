@@ -7,6 +7,7 @@
     <style>
       :host {
         font-family: 'roboto', sans-serif;
+        font-weight: bold;
         --form-width: 300px;
         --form-height: 320px;
       }
@@ -45,10 +46,13 @@
         display: block;
         padding: 20px;
         margin-top: 4vh;
-        height: 180px;
-        width: 300px;
-        font-size: 1em;
+        width: 90%;
+        font-size: 132%;
         font-weight: bold;
+        margin-left: 5%;
+        margin-right: 5%;
+        word-wrap: break-word;
+        display: inline-block;
       }
 
       .line-row {
@@ -68,11 +72,13 @@
         height: 300px;
         padding: 20px;
         padding-left: 30px;
-        font-size: 4vh;
+        font-size: 135%;
         margin-bottom: 4vh;
         margin-top: 4vh;
         color: black;
         overflow: auto;
+        border-style: solid;
+        border-width: 30px;
       }
 
       /*  SECTIONS  */
@@ -123,7 +129,7 @@
       }
 
       /*  GO FULL WIDTH AT LESS THAN 480 PIXELS */
-      @media only screen and (max-width: 611px) {
+      @media only screen and (max-width: 799px) {
         .col {
           margin: 1% 0 1% 0%;
         }
@@ -148,12 +154,20 @@
 
         <div class="col span_2_of_3">
           <div class="demoToolTip" >
-            <li>Change file content and see how the left textBox
-            show the changes.
-            </li>
-            <li>
-            Also refresh page and see last file content steel there.
-            </li>
+            <li>Create files and see them into left file-explorer.</li>
+            <br>
+            <li>Also refresh page and see last file content steel there.</li>
+            <br>
+            <li>Create a variable and initialize gs-file-system like
+            var this.storage = GsFileStorage() to use it.</li>
+            <br>
+            <li>gs file system is located in window.GS.GSFILESTORAGE and works like a singleton</li>
+            <br>
+            <li>gs-file-system let you save gs-files 
+                when create a gs-file, create a new GSFile("name") and then gs-file.saveIt() an
+                this save it into localStorage
+                On save trigger event change in file and if file is new gs-file-system
+                trigger listchange event.</li>
           </div>
 
         </div >

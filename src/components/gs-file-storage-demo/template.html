@@ -9,12 +9,20 @@
 
     <div class="col span_2_of_3">
       <div class="demoToolTip" >
-        <li>Change file content and see how the left textBox
-        show the changes.
-        </li>
-        <li>
-        Also refresh page and see last file content steel there.
-        </li>
+        <li>Create files and see them into left file-explorer.</li>
+        <br>
+        <li>Also refresh page and see last file content steel there.</li>
+        <br>
+        <li>Create a variable and initialize gs-file-system like
+        var this.storage = GsFileStorage() to use it.</li>
+        <br>
+        <li>gs file system is located in window.GS.GSFILESTORAGE and works like a singleton</li>
+        <br>
+        <li>gs-file-system let you save gs-files 
+            when create a gs-file, create a new GSFile("name") and then gs-file.saveIt() an
+            this save it into localStorage
+            On save trigger event change in file and if file is new gs-file-system
+            trigger listchange event.</li>
       </div>
 
     </div >

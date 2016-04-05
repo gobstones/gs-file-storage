@@ -7,7 +7,6 @@ Polymer
       value: []
  
   ready: ->
-    # window.localStorage.removeItem('gsFiles')
     @storage = GsFileStorage()
 
     @fileName
