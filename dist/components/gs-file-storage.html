@@ -58,18 +58,16 @@
           }
         },
         storageFile: function(gsFile) {
-          var data;
-          this._changedFileList(gsFile.getName());
+          var data, filesListChanged;
+          filesListChanged = !this.hotFiles[gsFile.getName()];
           this.hotFiles[gsFile.getName()] = gsFile;
           data = gsFile.getData();
-          return this.storage.setItem('gsFiles.' + gsFile.getName(), this._strfy(data));
-        },
-        _changedFileList: function(fileName) {
-          if (!this.hotFiles[fileName]) {
-            this._fire("listchange");
-            return console.log(this.actions['listchange']);
+          this.storage.setItem('gsFiles.' + gsFile.getName(), this._strfy(data));
+          if (filesListChanged) {
+            return this._fire("listchange");
           }
         },
+        _changedFileList: function(fileName) {},
         _fire: function(eventName) {
           var evnt;
           evnt = document.createEvent('CustomEvent');
@@ -97,18 +95,13 @@
         _allStorage: function() {
           var key, keys, storagedKey, _i, _len;
           keys = Object.keys(this.storage);
-          console.log(keys);
           storagedKey = [];
           for (_i = 0, _len = keys.length; _i < _len; _i++) {
             key = keys[_i];
             if (key.lastIndexOf('gsFiles.', 0) === 0) {
-              console.log(key.lastIndexOf('gsFiles.', 0));
-              console.log(key);
-              console.log(key.replace('gsFiles.', ""));
               storagedKey.push(key.replace('gsFiles.', ""));
             }
           }
-          console.log(storagedKey);
           return storagedKey;
         },
         initialize: function() {

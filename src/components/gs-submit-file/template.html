@@ -3,7 +3,7 @@
 </template>
 
 <div class="formContent">
-  <input on-keypress="checkIfEnter"
+  <input
     id="nameField" 
     type="text"
     placeholder="File Name"
@@ -12,5 +12,5 @@
   <textarea placeholder="File Content" id="textField" value={{textField}}></textarea>
 
   <button id="submitButton" on-tap="submitFields">{{buttonName}}</button>
-
+  
 </div>

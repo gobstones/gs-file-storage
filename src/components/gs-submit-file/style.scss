@@ -7,28 +7,46 @@ $label-font-size: 1em;
   clear: both;
 }
 
-#inputLabel, nameField::-webkit-input-placeholder, #submitButton {
+#inputLabel, #nameField::-webkit-input-placeholder, #submitButton {
   font-family: 'roboto', sans-serif;
   transition: all 0.3s ease-in-out;
+}
+
+#nameField::-webkit-input-placeholder {
+  font-size: 145px;
 }
 
 .formContent {
   box-sizing: border-box;
   box-shadow: 2px 2px 5px 1px rgba(0,0,0,0.2);
   padding-bottom: 2vh;
-  border-radius: 3px;
+  border-radius: 1px;
   background-color: white;
   padding-top: 2vh;
-  width: 200px;
-  height: 220px;
+  width: var(--form-width, 200px);
+  height: var(--form-height, 220px);
+}
+
+#inputLabel {
+  box-sizing: border-box;
+  padding: 4%;
+  height: var(--label-height, 80px);
+  width: var(--form-width, 200px);
+  font-size: 135%;
+  background: darken($color, 4%);
+  color: white;
+  line-height: 150%;
+  box-shadow: 0 2px 5px 1px rgba(0,0,0,0.2);
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  margin: 0;
 }
 
 #nameField {
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 3vh;
-  margin-top: 2vh;
-  width: 160px;
+  margin-top: 11%;
+  width: 80%;
   display: block;
   border: none;
   padding: 10px 0;
@@ -36,10 +54,10 @@ $label-font-size: 1em;
   transition: all 0.3s cubic-bezier(.64,.09,.08,1);
   background: linear-gradient(to bottom, rgba(255,255,255,0) 96%, $color 4%);
   background-position: -15vw 0;
-  background-size: 15vw 100%;
+  background-size:100%;
   background-repeat: no-repeat;
   color: darken($color, 20%);
-  
+  font-size: 135%;
   &:focus, &:valid {
     box-shadow: none;
     outline: none;
@@ -54,55 +72,39 @@ $label-font-size: 1em;
   }
 }
 
+#textField {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 11%;
+  width: 80%;
+  display: block;
+  border: none;
+  padding: 5% 0;
+  border-bottom: solid 1px $color;
+  transition: all 0.3s cubic-bezier(.64,.09,.08,1);
+  background: linear-gradient(to bottom, rgba(255,255,255,0) 96%, $color 4%);
+  background-repeat: no-repeat;
+  color: darken($color, 20%);
+  resize: none;
+  font-size: 135%;
+}
+
 #submitButton {
   border: none;
   background: $color;
   cursor: pointer;
   border-radius: 3px;
-  width: 130px;
+  width: 65%;
   color: white;
-  height: 22px;
+  height: 10%;
   margin-left: auto;
   margin-right: auto;
+  margin-top: 25%;
   display: block;
   box-shadow: 0 3px 6px 0 rgba(0,0,0,0.2);
-  font-size: 0.8em;
+  font-size: 143%;
   &:hover { 
     transform: translateY(-3px);
     box-shadow: 0 6px 6px 0 rgba(0,0,0,0.2);
   }
-}
-
-#inputLabel {
-  box-sizing: border-box;
-  padding: 20px;
-  height: 80px;
-  width: 200px;
-  font-size: $label-font-size;
-  background: darken($color, 4%);
-  color: white;
-  line-height: 150%;
-  border-radius: 3px 3px 0 0;
-  box-shadow: 0 2px 5px 1px rgba(0,0,0,0.2);
-  margin-bottom: -3px;
-  border-top-left-radius: 0px;
-  border-top-right-radius: 0px;
-}
-
-#textField {
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 30px;
-  width: 160px;
-  display: block;
-  border: none;
-  padding: 10px 0;
-  border-bottom: solid 1px $color;
-  transition: all 0.3s cubic-bezier(.64,.09,.08,1);
-  background: linear-gradient(to bottom, rgba(255,255,255,0) 96%, $color 4%);
-  background-position: -15vw 0;
-  background-size: 15vw 100%;
-  background-repeat: no-repeat;
-  color: darken($color, 20%);
-  resize: none;
 }

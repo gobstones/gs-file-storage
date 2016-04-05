@@ -66,19 +66,19 @@ GsFileStorage = ->
     # @param {gsfile}: a GSFile
     # return: void
     storageFile:(gsFile)->
-      @_changedFileList(gsFile.getName())
+      filesListChanged = not @hotFiles[gsFile.getName()]
       @hotFiles[gsFile.getName()] = gsFile
       data = gsFile.getData()
       @storage.setItem('gsFiles.' + gsFile.getName(), @_strfy(data))
+      if filesListChanged
+        @_fire("listchange")
 
     # Check if hotFiles list changed and trigger a event
     # @param {fileName}: string
     # return: void
     # trigger: listChangedEvent
     _changedFileList:(fileName)->
-      if not @hotFiles[fileName]
-        @_fire("listchange")
-        console.log @actions['listchange']
+      
 
     # Trigger event using distpatchEvent of custom event target
     # param {eventName}: string, event Name
@@ -109,16 +109,11 @@ GsFileStorage = ->
 
     _allStorage:->
       keys = Object.keys(@storage)
-      console.log keys
       
       storagedKey = []
       for key in keys
         if key.lastIndexOf('gsFiles.', 0) is 0
-          console.log key.lastIndexOf('gsFiles.', 0)
-          console.log key
-          console.log key.replace('gsFiles.', "")
           storagedKey.push(key.replace('gsFiles.', ""))
-      console.log storagedKey
       return storagedKey
     
     # Initialize service, need to be called before call any other method

@@ -5,13 +5,19 @@
 <dom-module id="gs-file-storage-demo">
   <template>
     <style>
+      :host {
+        font-family: 'roboto', sans-serif;
+        --form-width: 300px;
+        --form-height: 320px;
+      }
+
       #demo-header {
         margin: 0 auto;
         background-color: #E70126;
         display: table;
         font-size: 4vh;
         border-radius: 5px;
-        width: 40vw;
+        width: 70%;
         text-align: center;
         margin-top: 5vh;
         height: 10vh;
@@ -20,7 +26,7 @@
       .submitFileForm {
         display: block;
         margin-top: 4vh;
-        width: 200px;
+        width: 300px;
       }
 
       .column {
@@ -28,54 +34,18 @@
         display: table;
       }
 
-      #disabledText {
-        margin: 0 auto;
-        display: block;
-        width: 200px;
-        height: 180px;
-        box-sizing: border-box;
-        box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.2);
-        padding-bottom: 2vh;
-        border-radius: 3px;
-        background-color: white;
-        padding-top: 2vh;
-        font-size: 3vh;
-        border-top-left-radius: 0px;
-        border-top-right-radius: 0px;
-        border: none;
-        border-style: none;
-        border-color: Transparent;
-        overflow: auto;
-      }
-
-      #disabledLabel {
-        color: white;
-        box-sizing: border-box;
-        background: #d30123;
-        border-radius: 3px 3px 0 0;
-        box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
-        margin: 0 auto;
-        display: block;
-        margin-top: 4vh;
-        padding: 20px;
-        height: 80px;
-        width: 200px;
-        font-size: 1em;
-        line-height: 150%;
-      }
-
       .demoToolTip {
         color: white;
         box-sizing: border-box;
         background: #d30123;
-        border-radius: 3px 3px 0 0;
+        border-radius: 1px;
         box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
         margin: 0 auto;
         display: block;
         padding: 20px;
         margin-top: 4vh;
         height: 180px;
-        width: 90%;
+        width: 300px;
         font-size: 1em;
         font-weight: bold;
       }
@@ -89,17 +59,19 @@
         color: white;
         box-sizing: border-box;
         background: #d30123;
-        border-radius: 3px 3px 0 0;
+        border-radius: 1px;
         box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
         margin: 0 auto;
         display: block;
-        width: 200px;
-        height: 25vh;
-        padding: 15px;
+        width: 300px;
+        height: 300px;
+        padding: 20px;
+        padding-left: 30px;
         font-size: 4vh;
         margin-bottom: 4vh;
         margin-top: 4vh;
         color: black;
+        overflow: auto;
       }
 
       /*  SECTIONS  */
@@ -164,16 +136,13 @@
 
     </style>
 
-
-
     <p id="demo-header">An example of <br> <code>&lt;gs-file-storage&gt;</code>:</p>
 
     <div class="section group">
 
         <div class="col span_1_of_3">
-          <h1 id="disabledLabel"> File change event listener. </h1>
-          <textarea disabled id="disabledText"></textarea>
-              
+          <gs-file-explorer id="file-explorer" files="{{files}}"> 
+          </gs-file-explorer> 
         </div>
 
         <div class="col span_2_of_3">
@@ -191,6 +160,9 @@
         <div class="col span_3_of_3" >
           
           <gs-submit-file
+            width="320"
+            heigth="400"
+            label-heigth="40"
             label="File name and content edit."
             name-field={{fileDemo.data.name}} 
             text-field={{fileDemo.data.content}} 
@@ -203,80 +175,39 @@
 
 
     </div>
-    <div class="section group">
-        
-        <div class="col span_1_of_3">
-            <gs-file-explorer id="file-explorer" files="{{files}}"> 
-              
-            </gs-file-explorer>
-            
-        </div>
 
-        <div class="col span_2_of_3">
-            
-            <gs-submit-file
-              label="Create a new file"
-              name-field= 
-              text-field= 
-              button-name="Save" 
-              class="submitFileForm">
-            </gs-submit-file>
-
-          </div >
-
-        <div class="col span_3_of_3">
-          
-
-        </div>
-
-
-    </div>
           
 
   </template>
   <script>
     Polymer({
       is: 'gs-file-storage-demo',
-      listeners: {
-        'openFile': 'openFile',
-        'submitFile': 'saveFile'
-      },
       properties: {
-        fileContent: {
-          type: String
-        },
         files: {
           type: [],
           value: []
         }
       },
       ready: function() {
-        window.localStorage.removeItem('gsFiles');
         this.storage = GsFileStorage();
-        this.disabledText = this.$.disabledText;
+        this.fileName;
+        this.fileContent;
         this.makeFilesForFileExplorer(this.storage.getAllFilesName());
         this.storage.addEventListener('listchange', (function(_this) {
           return function(event) {
-            return _this.makeFilesForFileExplorer(_this.storage.getAllFilesName());
+            _this.makeFilesForFileExplorer(_this.storage.getAllFilesName());
+            console.log(_this.storage.getAllFilesName());
+            return console.log("se tiro el evento de lischange");
           };
         })(this));
-        this.fileDemo = this.storage.getFile("index.html");
-        return this.fileDemo.addEventListener('change', (function(_this) {
-          return function(event) {
-            var file;
-            file = event.target;
-            return _this.refreshTextContent(file.getContent());
-          };
-        })(this));
+        return this.listen(this.$.submit, 'submitFile', 'saveFile');
       },
       saveFile: function(polymerEvent) {
         var eventFile;
         eventFile = polymerEvent.detail.file;
+        this.fileDemo = this.storage.getFile(eventFile.name);
         this.fileDemo.setContent(eventFile.content);
         return this.fileDemo.saveIt();
-      },
-      refreshTextContent: function(text) {
-        return this.disabledText.value = text;
       },
       makeFilesForFileExplorer: function(filesNamesList) {
         var fName, filesNames, _i, _len, _results;
@@ -285,7 +216,6 @@
         _results = [];
         for (_i = 0, _len = filesNames.length; _i < _len; _i++) {
           fName = filesNames[_i];
-          console.log(fName);
           _results.push(this.push('files', {
             name: fName,
             content: ""

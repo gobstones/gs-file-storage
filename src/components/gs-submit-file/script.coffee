@@ -12,8 +12,3 @@ Polymer
 
   submitFields: (event)->
     @fire 'submitFile', file: {name: @$.nameField.value, content: @$.textField.value} 
-  
-  checkIfEnter: (event)->
-    console.log "Key pressed"
-    if event.keyCode is 13
-      @submitFields(event)
