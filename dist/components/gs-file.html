@@ -30,12 +30,13 @@
             saveFileError = _error;
             console.log("" + saveFileError);
           }
-          return this._fire("change");
+          return this.fire("change", this);
         };
-        this._fire = function(eventName) {
+        this.fire = function(eventName, host) {
           var evnt;
           evnt = document.createEvent('CustomEvent');
           evnt.initEvent(eventName, true, true);
+          evnt.host = host;
           return this.dispatchEvent(evnt);
         };
         this.removeIt = function() {
@@ -48,7 +49,7 @@
             removeFileError = _error;
             console.log("" + removeFileError);
           }
-          return this._fire("remove");
+          return this.fire("remove");
         };
         this.getName = function() {
           return this.data.name;

@@ -5,21 +5,16 @@ Polymer
     files:
       type: []
       value: []
- 
+
   ready: ->
     @storage = GsFileStorage()
 
-    @fileName
-    @fileContent
-
     @makeFilesForFileExplorer(@storage.getAllFilesName())
-  
+
     # When list change triggered refresh fileList
     @storage.addEventListener('listchange', 
       (event)=>
         @makeFilesForFileExplorer(@storage.getAllFilesName())
-        console.log @storage.getAllFilesName()
-        console.log "se tiro el evento de lischange"
     )
 
     @listen(@$.submit, 'submitFile', 'saveFile')

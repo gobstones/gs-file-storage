@@ -14,13 +14,13 @@ GsFileStorage = ->
         methods
 
   methods =
-    
+
     # Method for no use Json api, in case it change
     # @param {item}: any Object
     # @return:object received converted to string
     _strfy:(item)->
       JSON.stringify(item)
-    
+
     # Method to no use Json api, in case it change.
     # @param {string}: a string with json form parsable to
     # jsvascript type object
@@ -66,19 +66,12 @@ GsFileStorage = ->
     # @param {gsfile}: a GSFile
     # return: void
     storageFile:(gsFile)->
-      filesListChanged = not @hotFiles[gsFile.getName()]
+      filesListChanged = @filesNameList.indexOf(gsFile.getName()) is -1
       @hotFiles[gsFile.getName()] = gsFile
       data = gsFile.getData()
       @storage.setItem('gsFiles.' + gsFile.getName(), @_strfy(data))
       if filesListChanged
         @_fire("listchange")
-
-    # Check if hotFiles list changed and trigger a event
-    # @param {fileName}: string
-    # return: void
-    # trigger: listChangedEvent
-    _changedFileList:(fileName)->
-      
 
     # Trigger event using distpatchEvent of custom event target
     # param {eventName}: string, event Name
@@ -105,7 +98,8 @@ GsFileStorage = ->
         return file
 
     getAllFilesName:->
-      @_allStorage()
+      @filesNameList = @_allStorage()
+      @filesNameList
 
     _allStorage:->
       keys = Object.keys(@storage)
@@ -119,13 +113,32 @@ GsFileStorage = ->
     # Initialize service, need to be called before call any other method
     # create localStorage key 'gsFiles' in case it has no was created
     initialize: ->
+      console.log "initialized"
       CustomEventTarget.apply @
       @storage = window.localStorage
-      localStorageFiles = @storage.getItem('gsFiles')
-      if (localStorageFiles is undefined ) or (localStorageFiles is null)
-        @hotFiles = []
-      else
-        @hotFiles = @_parseJs(localStorageFiles)
+      @hotFiles = {}
+      @filesNameList = []
+
+      # if (localStorageFiles is undefined ) or (localStorageFiles is null)
+      # else
+      #   @hotFiles = @_parseJs(localStorageFiles)
+
+      window.addEventListener('storage', (event)=>
+        console.log event
+        newFile = @_parseJs(event.newValue)
+
+        # file = @hotFiles[newFile.name]
+        filesListChanged = @filesNameList.indexOf(newFile.name) is -1
+        
+        if filesListChanged
+          console.log "trigered listachange event"
+          @filesNameList.push(newFile.name)
+          @_fire("listchange")
+        else
+          if @hotFiles[newFile.name]
+            @hotFiles[newFile.name].setContent(newFile.content)
+            @hotFiles[newFile.name].fire("change", @)
+      )
 
   _checkServiceInNameSpace()
   window.GS.GSFILESTORAGE

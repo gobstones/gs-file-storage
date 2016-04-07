@@ -59,7 +59,7 @@
         },
         storageFile: function(gsFile) {
           var data, filesListChanged;
-          filesListChanged = !this.hotFiles[gsFile.getName()];
+          filesListChanged = this.filesNameList.indexOf(gsFile.getName()) === -1;
           this.hotFiles[gsFile.getName()] = gsFile;
           data = gsFile.getData();
           this.storage.setItem('gsFiles.' + gsFile.getName(), this._strfy(data));
@@ -67,7 +67,6 @@
             return this._fire("listchange");
           }
         },
-        _changedFileList: function(fileName) {},
         _fire: function(eventName) {
           var evnt;
           evnt = document.createEvent('CustomEvent');
@@ -90,7 +89,8 @@
           }
         },
         getAllFilesName: function() {
-          return this._allStorage();
+          this.filesNameList = this._allStorage();
+          return this.filesNameList;
         },
         _allStorage: function() {
           var key, keys, storagedKey, _i, _len;
@@ -105,15 +105,29 @@
           return storagedKey;
         },
         initialize: function() {
-          var localStorageFiles;
+          console.log("initialized");
           CustomEventTarget.apply(this);
           this.storage = window.localStorage;
-          localStorageFiles = this.storage.getItem('gsFiles');
-          if ((localStorageFiles === void 0) || (localStorageFiles === null)) {
-            return this.hotFiles = [];
-          } else {
-            return this.hotFiles = this._parseJs(localStorageFiles);
-          }
+          this.hotFiles = {};
+          this.filesNameList = [];
+          return window.addEventListener('storage', (function(_this) {
+            return function(event) {
+              var filesListChanged, newFile;
+              console.log(event);
+              newFile = _this._parseJs(event.newValue);
+              filesListChanged = _this.filesNameList.indexOf(newFile.name) === -1;
+              if (filesListChanged) {
+                console.log("trigered listachange event");
+                _this.filesNameList.push(newFile.name);
+                return _this._fire("listchange");
+              } else {
+                if (_this.hotFiles[newFile.name]) {
+                  _this.hotFiles[newFile.name].setContent(newFile.content);
+                  return _this.hotFiles[newFile.name].fire("change", _this);
+                }
+              }
+            };
+          })(this));
         }
       };
       _checkServiceInNameSpace();
