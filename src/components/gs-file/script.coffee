@@ -1,33 +1,32 @@
 GSFILE = do ->
 
   # Representates A File for the file system in gobstones-web
-
+  _content = ""
+  _name = ""
   constructor = (name) ->
     CustomEventTarget.apply @
-    @data = 
-      name: name
-      content: ""
+    _name = name
     
     # Initialize GsFileStorage service
     @_storage = GsFileStorage()
 
     # Saves the file changes into localStorage
     # and notify the change
-    # return: void
-    @saveIt = ->
+    # @param {content}: the file content to save
+    # @param {host}: the trigger of the event, may be undefined
+    # @return: void
+    @save =(content, host) ->
       try
+        _content = content
         @_storage.storageFile(@)
       catch saveFileError
         console.log "#{saveFileError}"
-      @fire("change", @)
+      @fire("change", host)
 
     # Trigger event using distpatchEvent of custom event target
     # param {eventName}: string, event Name
     # param {host}: the object that is responsible for firing the event 
     # return: void
-
-    # add from in event firing to know what object
-    # trigger the event
     @fire = (eventName, host)->
       evnt = document.createEvent('CustomEvent')
       evnt.initEvent eventName, true, true
@@ -44,19 +43,16 @@ GSFILE = do ->
       @fire("remove")
 
     @getName = ->
-      @data.name
+      _name
 
     @getContent = ->
-      @data.content
-
-    @setName = (string)->
-      @data.name = string
+      _content
 
     @setContent = (string)->
-      @data.content = string
+      _content = string
 
     @getData = ->
-      @data
+      {name: _name, content: _content}
 
     @
 

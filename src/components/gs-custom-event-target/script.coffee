@@ -53,15 +53,9 @@ CustomEventTarget = ->
     # param {name}: a string name for a event
     # param {action}: function to remove
     # return: void
-    # except: actions.eventName is empty.
-    # except: actions not contain callback  
     @removeEventListener = (name, action) ->
       actions = @actions[name]
       if actions
         exist = actions.indexOf(action)
         if exist > -1
           actions.splice(index, 1)
-        else
-          throw "Cannot find listener for that event"
-      else
-        throw "No listener founded for that event"

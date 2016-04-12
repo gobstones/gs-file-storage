@@ -30,7 +30,7 @@
     <div class="col span_3_of_3" >
       
       <gs-submit-file
-        label="Create and edit files."
+        label="Create files or rewrite existins files content."
         button-name="Save" 
         id="submit"
         class="submitFileForm">
@@ -42,3 +42,16 @@
 </div>
 
       
+<div class="section group">
+  <div class="col span_1_of_3">
+      <gs-submit-file
+        label="Open files and edit content."
+        button-name="Save" 
+        id="openedFileForm"
+        class="submitFileForm"
+        text-field="{{fileDemoText}}"
+        name-field="{{fileDemoName}}"
+        name-field="">
+      </gs-submit-file>
+  </div>
+</div>

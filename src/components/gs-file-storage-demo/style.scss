@@ -80,6 +80,16 @@ $color: #E70126;
   border-width: 30px;
 }
 
+#openedFileForm {
+  ::content {
+    #nameField {
+      pointer-events:none;
+    }
+  }
+}
+
+
+
 /*  SECTIONS  */
 .section {
   clear: both;

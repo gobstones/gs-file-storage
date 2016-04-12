@@ -54,11 +54,7 @@
           exist = actions.indexOf(action);
           if (exist > -1) {
             return actions.splice(index, 1);
-          } else {
-            throw "Cannot find listener for that event";
           }
-        } else {
-          throw "No listener founded for that event";
         }
       };
     };

@@ -34,7 +34,8 @@
           exist = this.hotFiles[fileName];
           if (exist) {
             delete this.hotFiles[fileName];
-            return this.storage.setItem('gsFiles', this._strfy(this.hotFiles));
+            this.storage.removeItem('gsFiles.' + fileName);
+            return this._fire("listchange");
           } else {
             throw "No sutch file with that name.";
           }
@@ -104,12 +105,7 @@
           }
           return storagedKey;
         },
-        initialize: function() {
-          console.log("initialized");
-          CustomEventTarget.apply(this);
-          this.storage = window.localStorage;
-          this.hotFiles = {};
-          this.filesNameList = [];
+        _listenOtherTabsFilesChange: function() {
           return window.addEventListener('storage', (function(_this) {
             return function(event) {
               var filesListChanged, newFile;
@@ -122,12 +118,19 @@
                 return _this._fire("listchange");
               } else {
                 if (_this.hotFiles[newFile.name]) {
-                  _this.hotFiles[newFile.name].setContent(newFile.content);
-                  return _this.hotFiles[newFile.name].fire("change", _this);
+                  return _this.hotFiles[newFile.name].save(newFile.content, _this);
                 }
               }
             };
           })(this));
+        },
+        initialize: function() {
+          console.log("initialized");
+          CustomEventTarget.apply(this);
+          this.storage = window.localStorage;
+          this.hotFiles = {};
+          this.filesNameList = [];
+          return this._listenOtherTabsFilesChange();
         }
       };
       _checkServiceInNameSpace();

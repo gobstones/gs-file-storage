@@ -81,6 +81,10 @@
         border-width: 30px;
       }
 
+      #openedFileForm ::content #nameField {
+        pointer-events: none;
+      }
+
       /*  SECTIONS  */
       .section {
         clear: both;
@@ -175,7 +179,7 @@
         <div class="col span_3_of_3" >
           
           <gs-submit-file
-            label="Create and edit files."
+            label="Create files or rewrite existins files content."
             button-name="Save" 
             id="submit"
             class="submitFileForm">
@@ -187,7 +191,19 @@
     </div>
 
           
-
+    <div class="section group">
+      <div class="col span_1_of_3">
+          <gs-submit-file
+            label="Open files and edit content."
+            button-name="Save" 
+            id="openedFileForm"
+            class="submitFileForm"
+            text-field="{{fileDemoText}}"
+            name-field="{{fileDemoName}}"
+            name-field="">
+          </gs-submit-file>
+      </div>
+    </div>
   </template>
   <script>
     Polymer({
@@ -196,7 +212,16 @@
         files: {
           type: [],
           value: []
+        },
+        fileDemoName: {
+          type: String
+        },
+        fileDemoText: {
+          type: String
         }
+      },
+      listeners: {
+        'openFile': 'openFile'
       },
       ready: function() {
         this.storage = GsFileStorage();
@@ -206,14 +231,17 @@
             return _this.makeFilesForFileExplorer(_this.storage.getAllFilesName());
           };
         })(this));
-        return this.listen(this.$.submit, 'submitFile', 'saveFile');
+        this.listen(this.$.submit, 'submitFile', 'saveFile');
+        return this.listen(this.$.openedFileForm, 'submitFile', 'saveOpenedFile');
       },
       saveFile: function(polymerEvent) {
-        var eventFile;
+        var eventFile, fileToStorage;
         eventFile = polymerEvent.detail.file;
-        this.fileDemo = this.storage.getFile(eventFile.name);
-        this.fileDemo.setContent(eventFile.content);
-        return this.fileDemo.saveIt();
+        fileToStorage = this.storage.getFile(eventFile.name);
+        return fileToStorage.save(eventFile.content, this);
+      },
+      saveOpenedFile: function(polymerEvent) {
+        return console.log("saveOpenedFile");
       },
       makeFilesForFileExplorer: function(filesNamesList) {
         var fName, filesNames, _i, _len, _results;
@@ -228,6 +256,24 @@
           }));
         }
         return _results;
+      },
+      openFile: function(polymerEvent) {
+        var fileName;
+        fileName = polymerEvent.detail.file.name;
+        this.fileDemo = this.storage.getFile(fileName);
+        this.fileDemoName = this.fileDemo.getName();
+        this.fileDemoText = this.fileDemo.getContent();
+        return this.fileDemo.addEventListener('change', (function(_this) {
+          return function(event) {
+            var newFile;
+            console.log("Entro en el change");
+            if (event.host !== _this) {
+              console.log("Entro en el if");
+              newFile = event.target;
+              return _this.fileDemoText = newFile.getContent();
+            }
+          };
+        })(this));
       }
     });
 

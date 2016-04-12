@@ -14,23 +14,23 @@
     var GSFILE;
 
     GSFILE = (function() {
-      var constructor;
+      var constructor, _content, _name;
+      _content = "";
+      _name = "";
       constructor = function(name) {
         CustomEventTarget.apply(this);
-        this.data = {
-          name: name,
-          content: ""
-        };
+        _name = name;
         this._storage = GsFileStorage();
-        this.saveIt = function() {
+        this.save = function(content, host) {
           var saveFileError;
           try {
+            _content = content;
             this._storage.storageFile(this);
           } catch (_error) {
             saveFileError = _error;
             console.log("" + saveFileError);
           }
-          return this.fire("change", this);
+          return this.fire("change", host);
         };
         this.fire = function(eventName, host) {
           var evnt;
@@ -52,19 +52,19 @@
           return this.fire("remove");
         };
         this.getName = function() {
-          return this.data.name;
+          return _name;
         };
         this.getContent = function() {
-          return this.data.content;
-        };
-        this.setName = function(string) {
-          return this.data.name = string;
+          return _content;
         };
         this.setContent = function(string) {
-          return this.data.content = string;
+          return _content = string;
         };
         this.getData = function() {
-          return this.data;
+          return {
+            name: _name,
+            content: _content
+          };
         };
         return this;
       };

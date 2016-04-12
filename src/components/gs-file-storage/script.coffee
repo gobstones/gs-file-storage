@@ -28,7 +28,7 @@ GsFileStorage = ->
     _parseJs:(string)->
       JSON.parse(string)
 
-    # Remove file from local storaga, by removing key map
+    # Remove file from local storage, by removing key map
     # param {fileName}: a string corresponding to a file name
     # exept: no exist a file with name = fileName
     # return: void
@@ -36,7 +36,11 @@ GsFileStorage = ->
       exist = @hotFiles[fileName]
       if exist
         delete @hotFiles[fileName]
-        @storage.setItem('gsFiles', @_strfy(@hotFiles))
+        # posiblemente sea necesario eliminar todos los listeners 
+        # antes de borrarlo.
+        @storage.removeItem('gsFiles.' + fileName);
+        @_fire("listchange")
+
       else
         throw "No sutch file with that name."
 
@@ -102,27 +106,14 @@ GsFileStorage = ->
       @filesNameList
 
     _allStorage:->
-      keys = Object.keys(@storage)
-      
+      keys = Object.keys(@storage)      
       storagedKey = []
       for key in keys
         if key.lastIndexOf('gsFiles.', 0) is 0
           storagedKey.push(key.replace('gsFiles.', ""))
       return storagedKey
     
-    # Initialize service, need to be called before call any other method
-    # create localStorage key 'gsFiles' in case it has no was created
-    initialize: ->
-      console.log "initialized"
-      CustomEventTarget.apply @
-      @storage = window.localStorage
-      @hotFiles = {}
-      @filesNameList = []
-
-      # if (localStorageFiles is undefined ) or (localStorageFiles is null)
-      # else
-      #   @hotFiles = @_parseJs(localStorageFiles)
-
+    _listenOtherTabsFilesChange:->
       window.addEventListener('storage', (event)=>
         console.log event
         newFile = @_parseJs(event.newValue)
@@ -136,9 +127,20 @@ GsFileStorage = ->
           @_fire("listchange")
         else
           if @hotFiles[newFile.name]
-            @hotFiles[newFile.name].setContent(newFile.content)
-            @hotFiles[newFile.name].fire("change", @)
+            @hotFiles[newFile.name].save(newFile.content, @)
+            #aca hay un problema, se va a volver a tirar el evento 
+            # en las demas pestañas me parece
       )
+
+    # Initialize service, need to be called before call any other method
+    # create localStorage key 'gsFiles' in case it has no was created
+    initialize: ->
+      console.log "initialized"
+      CustomEventTarget.apply @
+      @storage = window.localStorage
+      @hotFiles = {}
+      @filesNameList = []
+      @_listenOtherTabsFilesChange()
 
   _checkServiceInNameSpace()
   window.GS.GSFILESTORAGE
