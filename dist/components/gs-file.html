@@ -14,9 +14,10 @@
     var GSFILE;
 
     GSFILE = (function() {
-      var constructor, _content, _name;
+      var constructor, _content, _name, _openers;
       _content = "";
       _name = "";
+      _openers = [];
       constructor = function(name) {
         CustomEventTarget.apply(this);
         _name = name;
@@ -33,6 +34,19 @@
           evnt.host = host;
           return this.dispatchEvent(evnt);
         };
+        this.open = function(host) {
+          return _openers.push(host);
+        };
+        this.close = function(host) {
+          var openerIndex;
+          openerIndex = _openers.indexOf(host);
+          if (openerIndex !== -1) {
+            _openers.splice(openerIndex, 1);
+            if (_openers.length() === 0) {
+              return this._fire('closefile');
+            }
+          }
+        };
         this.remove = function() {
           this._fire("fileremove");
           return this.actions = {};
@@ -46,7 +60,7 @@
         this.setContent = function(string) {
           return _content = string;
         };
-        this.update = function(string, host) {
+        this.update = function(content, host) {
           _content = string;
           return this._fire("change", host);
         };

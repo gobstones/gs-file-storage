@@ -256,7 +256,7 @@
       saveFile: function(polymerEvent) {
         var eventFile, fileToStorage;
         eventFile = polymerEvent.detail.file;
-        fileToStorage = this.storage.getFile(eventFile.name);
+        fileToStorage = this.storage.open(eventFile.name, this);
         return fileToStorage.save(eventFile.content, this);
       },
       saveOpenedFile: function(polymerEvent) {
@@ -283,7 +283,7 @@
       openFile: function(polymerEvent) {
         var fileName;
         fileName = polymerEvent.detail.file.name;
-        this.fileDemo = this.storage.getFile(fileName);
+        this.fileDemo = this.storage.open(fileName, this);
         this.fileDemoName = this.fileDemo.getName();
         this.fileDemoText = this.fileDemo.getContent();
         this.fileDemo.addEventListener('change', (function(_this) {

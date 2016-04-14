@@ -3,6 +3,7 @@ GSFILE = do ->
   # Representates A File for the file system in gobstones-web
   _content = ""
   _name = ""
+  _openers = []
   constructor = (name) ->
     CustomEventTarget.apply @
     _name = name
@@ -30,6 +31,25 @@ GSFILE = do ->
       evnt.host = host
       @dispatchEvent(evnt)
 
+    # Add host to openers list. Store list of objects that
+    # have open this file.
+    # param {host}: an object that opened this file
+    # return void
+    @open = (host)->
+      # es necesario tener elementos repetidos ?
+      _openers.push(host)
+
+    # Remove host from openers list and fire closefile
+    # event to clean memory.
+    # param {host}: an object that opened this file
+    # return void
+    @close = (host)->
+      openerIndex = _openers.indexOf(host)
+      if openerIndex isnt -1
+        _openers.splice(openerIndex, 1)
+        if _openers.length() == 0
+          @_fire('closefile')
+
     # Remove file listeners
     # return: void
     @remove = ->
@@ -46,7 +66,14 @@ GSFILE = do ->
     @setContent = (string)->
       _content = string
 
-    @update = (string, host)->
+    # Method to set content and fire change event and not
+    # fire storage method on window.localStorage.
+    # this is usefull because sometimes there is no need
+    # to storage again the file.
+    # @param {content}: a string content
+    # @param {host}: the obj that make the update
+    # @return: void.
+    @update = (content, host)->
       _content = string
       @_fire("change", host)
 

@@ -30,7 +30,7 @@ Polymer
 
   saveFile: (polymerEvent)->
     eventFile = polymerEvent.detail.file
-    fileToStorage = @storage.getFile(eventFile.name)
+    fileToStorage = @storage.open(eventFile.name, @)
 
     # When file is saved trigger change event
     fileToStorage.save(eventFile.content, @)
@@ -51,7 +51,7 @@ Polymer
 
   openFile:(polymerEvent)->
     fileName = polymerEvent.detail.file.name
-    @fileDemo = @storage.getFile(fileName)
+    @fileDemo = @storage.open(fileName, @)
     
     @fileDemoName = @fileDemo.getName()
     @fileDemoText = @fileDemo.getContent()

@@ -52,25 +52,36 @@ GsFileStorage = ->
       (name isnt undefined and name.match(/[a-zA-Z]/) and name[0] isnt " ")
     
     # Get a file stored or create one.
-    # @param {name}: a string
+    # @param {fileName}: a string corresponding to a fileName
+    # @host {host}: the object that open the file
     # @return: a GSFILE
     # @except: in case that fileName is invalid 
-    getFile:(fileName)->
+    open: (fileName, host)->
       if @_fileNameValid(fileName)
-        fileExist = @_fileExist(fileName)
+        fileExist = @_getFileInMemoryOrLocalStorage(fileName)
         if fileExist
           return fileExist
+          fileExist.open(@)
         else
           file = new GSFILE(fileName)
-          @storageFile(file)
+          @hotFiles[file.getName()] = file
+          file.open(@)
+          @_handleClose(file)
           return file
       else
         throw "Invalid file name."
+    # handle file close event when any object is using 
+    # file.
+    # @param {file} a gs-file to listen for closefile event.
+    _handleClose: (file)->
+      file.addEventListener('closefile', (event)=>
+        console.log " se llamo al evento"
+      )
 
     # Save file in localStorage
     # @param {gsfile}: a GSFile
     # return: void
-    storageFile:(gsFile)->
+    storageFile: (gsFile)->
       filesListChanged = @filesNameList.indexOf(gsFile.getName()) is -1
       @hotFiles[gsFile.getName()] = gsFile
       data = gsFile.getData()
@@ -90,7 +101,7 @@ GsFileStorage = ->
     # in hotFiles variable
     # @param {fileName} string
     # #return: a GSFile or null
-    _fileExist:(fileName)->
+    _getFileInMemoryOrLocalStorage:(fileName)->
       fileExistJS = @hotFiles[fileName]
       if fileExistJS
         return fileExistJS

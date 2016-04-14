@@ -44,20 +44,30 @@
         _fileNameValid: function(name) {
           return name !== void 0 && name.match(/[a-zA-Z]/) && name[0] !== " ";
         },
-        getFile: function(fileName) {
+        open: function(fileName, host) {
           var file, fileExist;
           if (this._fileNameValid(fileName)) {
-            fileExist = this._fileExist(fileName);
+            fileExist = this._getFileInMemoryOrLocalStorage(fileName);
             if (fileExist) {
               return fileExist;
+              return fileExist.open(this);
             } else {
               file = new GSFILE(fileName);
-              this.storageFile(file);
+              this.hotFiles[file.getName()] = file;
+              file.open(this);
+              this._handleClose(file);
               return file;
             }
           } else {
             throw "Invalid file name.";
           }
+        },
+        _handleClose: function(file) {
+          return file.addEventListener('closefile', (function(_this) {
+            return function(event) {
+              return console.log(" se llamo al evento");
+            };
+          })(this));
         },
         storageFile: function(gsFile) {
           var data, filesListChanged;
@@ -75,7 +85,7 @@
           evnt.initEvent(eventName, true, true);
           return this.dispatchEvent(evnt);
         },
-        _fileExist: function(fileName) {
+        _getFileInMemoryOrLocalStorage: function(fileName) {
           var existLS, file, fileExistJS, parsedFile;
           fileExistJS = this.hotFiles[fileName];
           if (fileExistJS) {
