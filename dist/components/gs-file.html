@@ -34,9 +34,9 @@
           return this.dispatchEvent(evnt);
         };
         this.remove = function() {
+          this._fire("fileremove");
           return this.actions = {};
         };
-        this._fire("fileremove");
         this.getName = function() {
           return _name;
         };

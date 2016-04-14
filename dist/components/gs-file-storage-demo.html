@@ -286,7 +286,7 @@
         this.fileDemo = this.storage.getFile(fileName);
         this.fileDemoName = this.fileDemo.getName();
         this.fileDemoText = this.fileDemo.getContent();
-        return this.fileDemo.addEventListener('change', (function(_this) {
+        this.fileDemo.addEventListener('change', (function(_this) {
           return function(event) {
             var newFile;
             console.log("se tiro el evento change");
@@ -295,6 +295,13 @@
               newFile = event.target;
               return _this.fileDemoText = newFile.getContent();
             }
+          };
+        })(this));
+        return this.fileDemo.addEventListener('fileremove', (function(_this) {
+          return function(event) {
+            console.log("se tiro el evento remove");
+            _this.fileDemoText = null;
+            return _this.fileDemoName = null;
           };
         })(this));
       },

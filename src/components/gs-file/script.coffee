@@ -33,8 +33,9 @@ GSFILE = do ->
     # Remove file listeners
     # return: void
     @remove = ->
-        @actions = {}
       @_fire("fileremove")
+      # TODO: checkear esto con Ale
+      @actions = {}
 
     @getName = ->
       _name

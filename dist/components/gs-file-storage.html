@@ -111,7 +111,6 @@
             return function(event) {
               var newFile;
               if (event.newValue === null) {
-                console.log(event);
                 return _this.removeFile(_this._parseJs(event.oldValue).name);
               } else {
                 console.log("storage event in new value something");

@@ -26,7 +26,6 @@ Polymer
     )
 
     @listen(@$.submit, 'submitFile', 'saveFile')
-    
     @listen(@$.openedFileForm, 'submitFile', 'saveOpenedFile')
 
   saveFile: (polymerEvent)->
@@ -63,6 +62,12 @@ Polymer
         console.log "Entro en el if"
         newFile = event.target 
         @fileDemoText = newFile.getContent()
+    )
+
+    @fileDemo.addEventListener('fileremove', (event)=>
+      console.log "se tiro el evento remove"
+      @fileDemoText = null
+      @fileDemoName = null
     )
 
   removeFile: (polymerEvent)->

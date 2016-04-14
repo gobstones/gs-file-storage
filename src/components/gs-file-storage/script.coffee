@@ -122,7 +122,6 @@ GsFileStorage = ->
     _listenOtherTabsFilesChange:->
       window.addEventListener('storage', (event)=>
         if event.newValue is null
-          console.log event
           @removeFile(@_parseJs(event.oldValue).name)
         else
           console.log "storage event in new value something"
