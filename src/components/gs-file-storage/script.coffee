@@ -1,6 +1,8 @@
 GsFileStorage = ->
   
   # Service for managing localStorage files
+  # Get, create, remove files.
+  # trigger events when file change or file removed or file created.
   # use gsFiles as a key in localStorage
 
   # Method for check if nameSpace is created and
@@ -28,22 +30,21 @@ GsFileStorage = ->
     _parseJs:(string)->
       JSON.parse(string)
 
-    # Remove file from local storage, by removing key map
+    # Remove file from local storage and from fileSystem
     # param {fileName}: a string corresponding to a file name
-    # exept: no exist a file with name = fileName
+    # event: fileremove & listchange $ storage
     # return: void
     removeFile:(fileName)->
-      exist = @hotFiles[fileName]
-      if exist
+      getGsFile = @hotFiles[fileName]
+      if getGsFile
+        getGsFile.remove()
         delete @hotFiles[fileName]
-        # posiblemente sea necesario eliminar todos los listeners 
-        # antes de borrarlo.
-        @storage.removeItem('gsFiles.' + fileName);
+      # Check if file is in @filesNameList, just to avoid
+      # refresh @filesNameList if this isnt necessary
+      @storage.removeItem('gsFiles.' + fileName);
+      if @filesNameList.indexOf(fileName) isnt -1
         @_fire("listchange")
-
-      else
-        throw "No sutch file with that name."
-
+      
     # Method to validate file name to store.
     # @param {name}: a string
     # @return: true or false if name is valid 
@@ -100,36 +101,41 @@ GsFileStorage = ->
         file.setContent(parsedFile.content)
         @hotFiles[fileName] = file
         return file
-
+    
+    # Set in @filesNameList all files names storaged in 
+    # localStorge and return this. 
     getAllFilesName:->
       @filesNameList = @_allStorage()
       @filesNameList
 
+    # Return all names of files storaged in localStorage[fileSystemStorageKey]
     _allStorage:->
       keys = Object.keys(@storage)      
       storagedKey = []
       for key in keys
         if key.lastIndexOf('gsFiles.', 0) is 0
           storagedKey.push(key.replace('gsFiles.', ""))
-      return storagedKey
+      storagedKey
     
+    # Listen GSFile chenge event in other tabs, and listchange event
+    # in other tabs.
     _listenOtherTabsFilesChange:->
       window.addEventListener('storage', (event)=>
-        console.log event
-        newFile = @_parseJs(event.newValue)
-
-        # file = @hotFiles[newFile.name]
-        filesListChanged = @filesNameList.indexOf(newFile.name) is -1
-        
-        if filesListChanged
-          console.log "trigered listachange event"
-          @filesNameList.push(newFile.name)
-          @_fire("listchange")
+        if event.newValue is null
+          console.log event
+          @removeFile(@_parseJs(event.oldValue).name)
         else
-          if @hotFiles[newFile.name]
-            @hotFiles[newFile.name].save(newFile.content, @)
-            #aca hay un problema, se va a volver a tirar el evento 
-            # en las demas pestañas me parece
+          console.log "storage event in new value something"
+          newFile = @_parseJs(event.newValue)
+          
+          # if file is new in file list
+          if @filesNameList.indexOf(newFile.name) is -1
+            @filesNameList.push(newFile.name)
+            @_fire("listchange")
+          else
+            # if file is opened
+            if @hotFiles[newFile.name]
+              @hotFiles[newFile.name].update(newFile.content, @)
       )
 
     # Initialize service, need to be called before call any other method

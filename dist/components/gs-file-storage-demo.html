@@ -60,6 +60,24 @@
         float: left;
       }
 
+      #fileExplorerLabel {
+        color: white;
+        box-sizing: border-box;
+        background: #d30123;
+        border-radius: 1px;
+        box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
+        margin: 0 auto;
+        display: block;
+        padding: 4%;
+        padding-left: 12%;
+        padding-right: 9%;
+        height: 80px;
+        width: 300px;
+        font-size: 135%;
+        line-height: 150%;
+        margin-top: 4vh;
+      }
+
       #file-explorer {
         color: white;
         box-sizing: border-box;
@@ -74,11 +92,11 @@
         padding-left: 30px;
         font-size: 135%;
         margin-bottom: 4vh;
-        margin-top: 4vh;
         color: black;
         overflow: auto;
         border-style: solid;
-        border-width: 30px;
+        border-width: 10px;
+        background: #676767;
       }
 
       #openedFileForm ::content #nameField {
@@ -132,8 +150,7 @@
         width: 33.33333333%;
       }
 
-      /*  GO FULL WIDTH AT LESS THAN 480 PIXELS */
-      @media only screen and (max-width: 799px) {
+      @media only screen and (max-width: 600px) {
         .col {
           margin: 1% 0 1% 0%;
         }
@@ -152,6 +169,7 @@
     <div class="section group">
 
         <div class="col span_1_of_3">
+        <h1 id="fileExplorerLabel" > File Explorer</h1>
           <gs-file-explorer id="file-explorer" files="{{files}}"> 
           </gs-file-explorer> 
         </div>
@@ -221,7 +239,8 @@
         }
       },
       listeners: {
-        'openFile': 'openFile'
+        'openFile': 'openFile',
+        'removeFile': 'removeFile'
       },
       ready: function() {
         this.storage = GsFileStorage();
@@ -241,7 +260,11 @@
         return fileToStorage.save(eventFile.content, this);
       },
       saveOpenedFile: function(polymerEvent) {
-        return console.log("saveOpenedFile");
+        var eventFile;
+        eventFile = polymerEvent.detail.file;
+        if (this.fileDemo.getName() === eventFile.name) {
+          return this.fileDemo.save(eventFile.content, this);
+        }
       },
       makeFilesForFileExplorer: function(filesNamesList) {
         var fName, filesNames, _i, _len, _results;
@@ -266,7 +289,7 @@
         return this.fileDemo.addEventListener('change', (function(_this) {
           return function(event) {
             var newFile;
-            console.log("Entro en el change");
+            console.log("se tiro el evento change");
             if (event.host !== _this) {
               console.log("Entro en el if");
               newFile = event.target;
@@ -274,6 +297,11 @@
             }
           };
         })(this));
+      },
+      removeFile: function(polymerEvent) {
+        var fileName;
+        fileName = polymerEvent.detail.file.name;
+        return this.storage.removeFile(fileName);
       }
     });
 

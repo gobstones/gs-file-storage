@@ -22,35 +22,21 @@
         _name = name;
         this._storage = GsFileStorage();
         this.save = function(content, host) {
-          var saveFileError;
-          try {
-            _content = content;
-            this._storage.storageFile(this);
-          } catch (_error) {
-            saveFileError = _error;
-            console.log("" + saveFileError);
-          }
-          return this.fire("change", host);
+          _content = content;
+          this._storage.storageFile(this);
+          return this._fire("change", host);
         };
-        this.fire = function(eventName, host) {
+        this._fire = function(eventName, host) {
           var evnt;
           evnt = document.createEvent('CustomEvent');
           evnt.initEvent(eventName, true, true);
           evnt.host = host;
           return this.dispatchEvent(evnt);
         };
-        this.removeIt = function() {
-          var removeFileError;
-          try {
-            this._storage.removeFile({
-              name: this.name
-            });
-          } catch (_error) {
-            removeFileError = _error;
-            console.log("" + removeFileError);
-          }
-          return this.fire("remove");
+        this.remove = function() {
+          return this.actions = {};
         };
+        this._fire("fileremove");
         this.getName = function() {
           return _name;
         };
@@ -59,6 +45,10 @@
         };
         this.setContent = function(string) {
           return _content = string;
+        };
+        this.update = function(string, host) {
+          _content = string;
+          return this._fire("change", host);
         };
         this.getData = function() {
           return {

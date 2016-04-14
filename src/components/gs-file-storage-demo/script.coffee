@@ -12,6 +12,7 @@ Polymer
 
   listeners:
     'openFile': 'openFile'
+    'removeFile' : 'removeFile'
 
   ready: ->
     @storage = GsFileStorage()
@@ -27,16 +28,18 @@ Polymer
     @listen(@$.submit, 'submitFile', 'saveFile')
     
     @listen(@$.openedFileForm, 'submitFile', 'saveOpenedFile')
-  
+
   saveFile: (polymerEvent)->
     eventFile = polymerEvent.detail.file
     fileToStorage = @storage.getFile(eventFile.name)
-    
+
     # When file is saved trigger change event
     fileToStorage.save(eventFile.content, @)
 
   saveOpenedFile: (polymerEvent)->
-    console.log "saveOpenedFile"
+    eventFile = polymerEvent.detail.file
+    if @fileDemo.getName() is eventFile.name
+      @fileDemo.save(eventFile.content, @)
 
   makeFilesForFileExplorer: (filesNamesList)->
     filesNames = filesNamesList
@@ -53,11 +56,15 @@ Polymer
     
     @fileDemoName = @fileDemo.getName()
     @fileDemoText = @fileDemo.getContent()
-    
+
     @fileDemo.addEventListener('change', (event)=>
-      console.log "Entro en el change"
+      console.log "se tiro el evento change"
       if event.host isnt @
         console.log "Entro en el if"
         newFile = event.target 
         @fileDemoText = newFile.getContent()
     )
+
+  removeFile: (polymerEvent)->
+    fileName = polymerEvent.detail.file.name
+    @storage.removeFile(fileName)

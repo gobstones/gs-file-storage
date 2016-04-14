@@ -58,4 +58,4 @@ CustomEventTarget = ->
       if actions
         exist = actions.indexOf(action)
         if exist > -1
-          actions.splice(index, 1)
+          actions.splice(exist, 1)

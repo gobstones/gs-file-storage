@@ -16,31 +16,25 @@ GSFILE = do ->
     # @param {host}: the trigger of the event, may be undefined
     # @return: void
     @save =(content, host) ->
-      try
-        _content = content
-        @_storage.storageFile(@)
-      catch saveFileError
-        console.log "#{saveFileError}"
-      @fire("change", host)
+      _content = content
+      @_storage.storageFile(@)
+      @_fire("change", host)
 
     # Trigger event using distpatchEvent of custom event target
     # param {eventName}: string, event Name
     # param {host}: the object that is responsible for firing the event 
     # return: void
-    @fire = (eventName, host)->
+    @_fire = (eventName, host)->
       evnt = document.createEvent('CustomEvent')
       evnt.initEvent eventName, true, true
       evnt.host = host
       @dispatchEvent(evnt)
 
-    # Remove file from Local Storage
+    # Remove file listeners
     # return: void
-    @removeIt = ->
-      try
-        @_storage.removeFile(name: @name)
-      catch removeFileError
-        console.log "#{removeFileError}"
-      @fire("remove")
+    @remove = ->
+        @actions = {}
+      @_fire("fileremove")
 
     @getName = ->
       _name
@@ -50,6 +44,10 @@ GSFILE = do ->
 
     @setContent = (string)->
       _content = string
+
+    @update = (string, host)->
+      _content = string
+      @_fire("change", host)
 
     @getData = ->
       {name: _name, content: _content}

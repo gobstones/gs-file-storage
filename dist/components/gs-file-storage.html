@@ -30,14 +30,15 @@
           return JSON.parse(string);
         },
         removeFile: function(fileName) {
-          var exist;
-          exist = this.hotFiles[fileName];
-          if (exist) {
+          var getGsFile;
+          getGsFile = this.hotFiles[fileName];
+          if (getGsFile) {
+            getGsFile.remove();
             delete this.hotFiles[fileName];
-            this.storage.removeItem('gsFiles.' + fileName);
+          }
+          this.storage.removeItem('gsFiles.' + fileName);
+          if (this.filesNameList.indexOf(fileName) !== -1) {
             return this._fire("listchange");
-          } else {
-            throw "No sutch file with that name.";
           }
         },
         _fileNameValid: function(name) {
@@ -108,17 +109,20 @@
         _listenOtherTabsFilesChange: function() {
           return window.addEventListener('storage', (function(_this) {
             return function(event) {
-              var filesListChanged, newFile;
-              console.log(event);
-              newFile = _this._parseJs(event.newValue);
-              filesListChanged = _this.filesNameList.indexOf(newFile.name) === -1;
-              if (filesListChanged) {
-                console.log("trigered listachange event");
-                _this.filesNameList.push(newFile.name);
-                return _this._fire("listchange");
+              var newFile;
+              if (event.newValue === null) {
+                console.log(event);
+                return _this.removeFile(_this._parseJs(event.oldValue).name);
               } else {
-                if (_this.hotFiles[newFile.name]) {
-                  return _this.hotFiles[newFile.name].save(newFile.content, _this);
+                console.log("storage event in new value something");
+                newFile = _this._parseJs(event.newValue);
+                if (_this.filesNameList.indexOf(newFile.name) === -1) {
+                  _this.filesNameList.push(newFile.name);
+                  return _this._fire("listchange");
+                } else {
+                  if (_this.hotFiles[newFile.name]) {
+                    return _this.hotFiles[newFile.name].update(newFile.content, _this);
+                  }
                 }
               }
             };
