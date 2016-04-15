@@ -49,13 +49,13 @@ CustomEventTarget = ->
       @trigger evento.type, evento
 
 
-    # Remove callback from event callbacks
+    # Remove handler from event callbacks
     # param {name}: a string name for a event
-    # param {action}: function to remove
+    # param {action}: handler to remove
     # return: void
-    @removeEventListener = (name, action) ->
+    @removeEventListener = (name, handler) ->
       actions = @actions[name]
       if actions
-        exist = actions.indexOf(action)
+        exist = actions.indexOf(handler)
         if exist > -1
           actions.splice(exist, 1)

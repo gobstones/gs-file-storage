@@ -47,11 +47,11 @@
         });
         return this.trigger(evento.type, evento);
       };
-      return this.removeEventListener = function(name, action) {
+      return this.removeEventListener = function(name, handler) {
         var actions, exist;
         actions = this.actions[name];
         if (actions) {
-          exist = actions.indexOf(action);
+          exist = actions.indexOf(handler);
           if (exist > -1) {
             return actions.splice(exist, 1);
           }

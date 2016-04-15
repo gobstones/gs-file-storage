@@ -1,5 +1,5 @@
 {
-  "name": "gs-file-storage",
+  "name": "gs-file-system",
   "imports": [
     "gs-custom-event-target.html"
   ]

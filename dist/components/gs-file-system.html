@@ -1,5 +1,5 @@
 <link rel="import" href="gs-custom-event-target.html">
-<dom-module id="gs-file-storage">
+<dom-module id="gs-file-system">
   <template>
     <style>
       
@@ -11,13 +11,13 @@
 
   </template>
   <script>
-    var GsFileStorage;
+    var GsFileSystem;
 
-    GsFileStorage = function() {
+    GsFileSystem = function(localStorageKey) {
       var methods, _checkServiceInNameSpace;
       _checkServiceInNameSpace = function() {
         window.GS = window.GS || {};
-        return window.GS.GSFILESTORAGE = window.GS.GSFILESTORAGE || (function() {
+        return window.GS.GSFILESYSTEM = window.GS.GSFILESYSTEM || (function() {
           methods.initialize();
           return methods;
         })();
@@ -36,7 +36,7 @@
             getGsFile.remove();
             delete this.hotFiles[fileName];
           }
-          this.storage.removeItem('gsFiles.' + fileName);
+          this.storage.removeItem(this._storageKeyForUse() + fileName);
           if (this.filesNameList.indexOf(fileName) !== -1) {
             return this._fire("listchange");
           }
@@ -52,7 +52,7 @@
               return fileExist;
               return fileExist.open(this);
             } else {
-              file = new GSFILE(fileName);
+              file = new GSFILE(fileName, localStorageKey);
               this.hotFiles[file.getName()] = file;
               file.open(this);
               this._handleClose(file);
@@ -74,7 +74,7 @@
           filesListChanged = this.filesNameList.indexOf(gsFile.getName()) === -1;
           this.hotFiles[gsFile.getName()] = gsFile;
           data = gsFile.getData();
-          this.storage.setItem('gsFiles.' + gsFile.getName(), this._strfy(data));
+          this.storage.setItem(this._storageKeyForUse() + gsFile.getName(), this._strfy(data));
           if (filesListChanged) {
             return this._fire("listchange");
           }
@@ -91,7 +91,7 @@
           if (fileExistJS) {
             return fileExistJS;
           }
-          existLS = this.storage.getItem('gsFiles.' + fileName);
+          existLS = this.storage.getItem(this._storageKeyForUse() + fileName);
           if (existLS) {
             parsedFile = this._parseJs(existLS);
             file = new GSFILE(parsedFile.name);
@@ -110,8 +110,8 @@
           storagedKey = [];
           for (_i = 0, _len = keys.length; _i < _len; _i++) {
             key = keys[_i];
-            if (key.lastIndexOf('gsFiles.', 0) === 0) {
-              storagedKey.push(key.replace('gsFiles.', ""));
+            if (key.lastIndexOf(this._storageKeyForUse(), 0) === 0) {
+              storagedKey.push(key.replace(this._storageKeyForUse(), ""));
             }
           }
           return storagedKey;
@@ -137,17 +137,21 @@
             };
           })(this));
         },
+        _storageKeyForUse: function() {
+          return this._localStorageKey + ".";
+        },
         initialize: function() {
           console.log("initialized");
           CustomEventTarget.apply(this);
           this.storage = window.localStorage;
           this.hotFiles = {};
           this.filesNameList = [];
-          return this._listenOtherTabsFilesChange();
+          this._listenOtherTabsFilesChange();
+          return this._localStorageKey = localStorageKey || "GSFiles";
         }
       };
       _checkServiceInNameSpace();
-      return window.GS.GSFILESTORAGE;
+      return window.GS.GSFILESYSTEM;
     };
 
   </script>

@@ -1,4 +1,4 @@
-GsFileStorage = ->
+GsFileSystem = (localStorageKey)->
   
   # Service for managing localStorage files
   # Get, create, remove files.
@@ -9,9 +9,9 @@ GsFileStorage = ->
   # service initialized.
   _checkServiceInNameSpace = ->
     window.GS = window.GS or {}
-    window.GS.GSFILESTORAGE = 
-      window.GS.GSFILESTORAGE or 
-      do -> 
+    window.GS.GSFILESYSTEM = 
+      window.GS.GSFILESYSTEM or 
+      do ->
         methods.initialize() 
         methods
 
@@ -41,7 +41,7 @@ GsFileStorage = ->
         delete @hotFiles[fileName]
       # Check if file is in @filesNameList, just to avoid
       # refresh @filesNameList if this isnt necessary
-      @storage.removeItem('gsFiles.' + fileName);
+      @storage.removeItem(@_storageKeyForUse() + fileName);
       if @filesNameList.indexOf(fileName) isnt -1
         @_fire("listchange")
       
@@ -63,7 +63,7 @@ GsFileStorage = ->
           return fileExist
           fileExist.open(@)
         else
-          file = new GSFILE(fileName)
+          file = new GSFILE(fileName, localStorageKey)
           @hotFiles[file.getName()] = file
           file.open(@)
           @_handleClose(file)
@@ -85,7 +85,7 @@ GsFileStorage = ->
       filesListChanged = @filesNameList.indexOf(gsFile.getName()) is -1
       @hotFiles[gsFile.getName()] = gsFile
       data = gsFile.getData()
-      @storage.setItem('gsFiles.' + gsFile.getName(), @_strfy(data))
+      @storage.setItem(@_storageKeyForUse() + gsFile.getName(), @_strfy(data))
       if filesListChanged
         @_fire("listchange")
 
@@ -105,7 +105,7 @@ GsFileStorage = ->
       fileExistJS = @hotFiles[fileName]
       if fileExistJS
         return fileExistJS
-      existLS = @storage.getItem('gsFiles.' + fileName)
+      existLS = @storage.getItem(@_storageKeyForUse() + fileName)
       if existLS
         parsedFile = @_parseJs(existLS)
         file = new GSFILE(parsedFile.name)
@@ -124,8 +124,8 @@ GsFileStorage = ->
       keys = Object.keys(@storage)      
       storagedKey = []
       for key in keys
-        if key.lastIndexOf('gsFiles.', 0) is 0
-          storagedKey.push(key.replace('gsFiles.', ""))
+        if key.lastIndexOf(@_storageKeyForUse(), 0) is 0
+          storagedKey.push(key.replace(@_storageKeyForUse(), ""))
       storagedKey
     
     # Listen GSFile chenge event in other tabs, and listchange event
@@ -148,6 +148,9 @@ GsFileStorage = ->
               @hotFiles[newFile.name].update(newFile.content, @)
       )
 
+    _storageKeyForUse:->
+      @_localStorageKey + "."
+
     # Initialize service, need to be called before call any other method
     # create localStorage key 'gsFiles' in case it has no was created
     initialize: ->
@@ -157,6 +160,7 @@ GsFileStorage = ->
       @hotFiles = {}
       @filesNameList = []
       @_listenOtherTabsFilesChange()
-
+      @_localStorageKey = localStorageKey or "GSFiles"
+  
   _checkServiceInNameSpace()
-  window.GS.GSFILESTORAGE
+  window.GS.GSFILESYSTEM

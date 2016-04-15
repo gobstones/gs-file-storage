@@ -1,7 +1,7 @@
 {
   "name": "gs-file-storage-demo",
   "imports": [
-    "gs-file-storage.html",
+    "gs-file-system.html",
     "gs-submit-file.html",
     "gs-file.html",
     "../../../gs-file-explorer/dist/components/gs-file-explorer.html"

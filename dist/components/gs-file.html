@@ -18,10 +18,10 @@
       _content = "";
       _name = "";
       _openers = [];
-      constructor = function(name) {
+      constructor = function(name, localStorageKey) {
         CustomEventTarget.apply(this);
         _name = name;
-        this._storage = GsFileStorage();
+        this._storage = GsFileSystem(localStorageKey);
         this.save = function(content, host) {
           _content = content;
           this._storage.storageFile(this);
@@ -61,7 +61,7 @@
           return _content = string;
         };
         this.update = function(content, host) {
-          _content = string;
+          _content = content;
           return this._fire("change", host);
         };
         this.getData = function() {

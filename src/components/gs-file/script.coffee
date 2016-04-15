@@ -4,12 +4,12 @@ GSFILE = do ->
   _content = ""
   _name = ""
   _openers = []
-  constructor = (name) ->
+  constructor = (name, localStorageKey) ->
     CustomEventTarget.apply @
     _name = name
     
     # Initialize GsFileStorage service
-    @_storage = GsFileStorage()
+    @_storage = GsFileSystem(localStorageKey)
 
     # Saves the file changes into localStorage
     # and notify the change
@@ -54,7 +54,6 @@ GSFILE = do ->
     # return: void
     @remove = ->
       @_fire("fileremove")
-      # TODO: checkear esto con Ale
       @actions = {}
 
     @getName = ->
@@ -74,7 +73,7 @@ GSFILE = do ->
     # @param {host}: the obj that make the update
     # @return: void.
     @update = (content, host)->
-      _content = string
+      _content = content
       @_fire("change", host)
 
     @getData = ->

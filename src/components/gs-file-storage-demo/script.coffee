@@ -15,7 +15,7 @@ Polymer
     'removeFile' : 'removeFile'
 
   ready: ->
-    @storage = GsFileStorage()
+    @storage = GsFileSystem("gsFiles")
 
     @makeFilesForFileExplorer(@storage.getAllFilesName())
 
