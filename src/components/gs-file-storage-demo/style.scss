@@ -25,7 +25,6 @@ $color: #E70126;
   background-color: #E70126;
   display: table;
   font-size: 4vh;
-  border-radius: 5px;
   width: 70%;
   text-align: center;
   margin-top: 5vh;
@@ -68,16 +67,26 @@ $color: #E70126;
 
 
 #fileExplorerLabel {
-  @include materialDesign();
+  font-family: 'roboto', sans-serif;
+  transition: all 0.3s ease-in-out;
+}
+
+#fileExplorerLabel {
   @include centerDiv();
-  padding: 4%;
-  padding-left: 12%;
-  padding-right: 9%;
-  height: 80px;
-  width: 300px;
+  box-sizing: border-box;
+  padding-top: 4%;
+  height: var(--label-height, 80px);
+  width: var(--form-width, 200px);
   font-size: 135%;
+  background: darken($color, 4%);
+  color: white;
   line-height: 150%;
+  box-shadow: 0 2px 5px 1px rgba(0,0,0,0.2);
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
   margin-top: 4vh;
+  text-align: center;
+
 }
 
 
@@ -94,20 +103,8 @@ $color: #E70126;
   overflow: auto;
   border-style: solid;
   border-width: 10px;
-  background: darken(grey, 10%);
+  background: darken(white, 10%);
 }
-
-
-
-
-#openedFileForm {
-  // ::content {
-  //   #nameField {
-  //     pointer-events:none;
-  //   }
-  // }
-}
-
 
 
 /*  SECTIONS  */
@@ -150,7 +147,8 @@ $color: #E70126;
   width: 33.33333333%;
 }
 
-@media only screen and (max-width: 600px) {
+
+@media only screen and (max-width: 900px) {
   .col { margin: 1% 0 1% 0%;}
   .span_3_of_3, .span_2_of_3, .span_1_of_3 { width: 100%; }
 }
