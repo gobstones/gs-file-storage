@@ -10,41 +10,21 @@
 
     <div class="col span_2_of_3">
       <div class="demoToolTip" >
-        <li>Create files and see them into left file-explorer.</li>
+        <li> Create files in right form</li>
         <br>
-        <li>Also refresh page and see last file content steel there.</li>
+        <li> See them in File Exporer </li>
         <br>
-        <li>Create a variable and initialize gs-file-system like
-        var this.storage = GsFileStorage() to use it.</li>
+        <li> Right click on file explorer file and open or remove</li>
         <br>
-        <li>gs file system is located in window.GS.GSFILESTORAGE and works like a singleton</li>
+        <li> See opened file in bottom form and edit them</li>
         <br>
-        <li>gs-file-system let you save gs-files 
-            when create a gs-file, create a new GSFile("name") and then gs-file.saveIt() an
-            this save it into localStorage
-            On save trigger event change in file and if file is new gs-file-system
-            trigger listchange event.</li>
+        <li> Open others tab, and edit (with bottom form) or remove files and see how change in others tabs</li>
       </div>
 
     </div >
 
     <div class="col span_3_of_3" >
       
-      <gs-submit-file
-        label="Create files or rewrite existins files content."
-        button-name="Save" 
-        id="submit"
-        class="submitFileForm">
-      </gs-submit-file>
-    
-    </div>
-
-
-</div>
-
-      
-<div class="section group">
-  <div class="col span_1_of_3">
       <gs-submit-file
         label="Open files and edit content."
         button-name="Save" 
@@ -54,5 +34,22 @@
         name-field="{{fileDemoName}}"
         name-field="">
       </gs-submit-file>
+
+      
+      <!-- <gs-submit-file
+        label="Create files or rewrite existins files content."
+        button-name="Save" 
+        id="submit"
+        class="submitFileForm">
+      </gs-submit-file> -->
+    
+    </div>
+
+
+</div>
+
+<div class="section group">
+  <div class="col span_1_of_3">
+      
   </div>
 </div>

@@ -14,11 +14,12 @@
     var GSFILE;
 
     GSFILE = (function() {
-      var constructor, _content, _name, _openers;
-      _content = "";
-      _name = "";
-      _openers = [];
+      var constructor;
       constructor = function(name, localStorageKey) {
+        var _content, _name, _openers;
+        _content = "";
+        _name = "";
+        _openers = [];
         CustomEventTarget.apply(this);
         _name = name;
         this._storage = GsFileSystem(localStorageKey);

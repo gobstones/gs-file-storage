@@ -25,20 +25,19 @@ Polymer
         @makeFilesForFileExplorer(@storage.getAllFilesName())
     )
 
-    @listen(@$.submit, 'submitFile', 'saveFile')
-    @listen(@$.openedFileForm, 'submitFile', 'saveOpenedFile')
+    @listen(@$.openedFileForm, 'submitFile', 'saveFile')
+    
+    # @listen(@$.openedFileForm, 'submitFile', 'saveOpenedFile')
+
+  # saveFile: (polymerEvent)->
 
   saveFile: (polymerEvent)->
     eventFile = polymerEvent.detail.file
+
     fileToStorage = @storage.open(eventFile.name, @)
 
     # When file is saved trigger change event
     fileToStorage.save(eventFile.content, @)
-
-  saveOpenedFile: (polymerEvent)->
-    eventFile = polymerEvent.detail.file
-    if @fileDemo.getName() is eventFile.name
-      @fileDemo.save(eventFile.content, @)
 
   makeFilesForFileExplorer: (filesNamesList)->
     filesNames = filesNamesList
@@ -50,22 +49,20 @@ Polymer
       )
 
   openFile:(polymerEvent)->
+    
     fileName = polymerEvent.detail.file.name
     @fileDemo = @storage.open(fileName, @)
     
-    @fileDemoName = @fileDemo.getName()
-    @fileDemoText = @fileDemo.getContent()
+    @set('fileDemoName', @fileDemo.getName())
+    @set('fileDemoText', @fileDemo.getContent())
 
     @fileDemo.addEventListener('change', (event)=>
-      console.log "se tiro el evento change"
       if event.host isnt @
-        console.log "Entro en el if"
         newFile = event.target 
         @fileDemoText = newFile.getContent()
     )
 
     @fileDemo.addEventListener('fileremove', (event)=>
-      console.log "se tiro el evento remove"
       @fileDemoText = null
       @fileDemoName = null
     )

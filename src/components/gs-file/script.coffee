@@ -1,14 +1,16 @@
 GSFILE = do ->
 
-  # Representates A File for the file system in gobstones-web
-  _content = ""
-  _name = ""
-  _openers = []
   constructor = (name, localStorageKey) ->
+    
+    # Representates A File for the file system in gobstones-web
+    _content = ""
+    _name = ""
+    _openers = []
+    
     CustomEventTarget.apply @
     _name = name
     
-    # Initialize GsFileStorage service
+    # Initialize GsFileSystem service
     @_storage = GsFileSystem(localStorageKey)
 
     # Saves the file changes into localStorage

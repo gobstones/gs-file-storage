@@ -35,10 +35,10 @@ GsFileSystem = (localStorageKey)->
     # event: fileremove & listchange $ storage
     # return: void
     removeFile:(fileName)->
-      getGsFile = @hotFiles[fileName]
+      getGsFile = @hotFiles.get(fileName)
       if getGsFile
         getGsFile.remove()
-        delete @hotFiles[fileName]
+        @hotFiles.delete(fileName)
       # Check if file is in @filesNameList, just to avoid
       # refresh @filesNameList if this isnt necessary
       @storage.removeItem(@_storageKeyForUse() + fileName);
@@ -60,11 +60,11 @@ GsFileSystem = (localStorageKey)->
       if @_fileNameValid(fileName)
         fileExist = @_getFileInMemoryOrLocalStorage(fileName)
         if fileExist
-          return fileExist
           fileExist.open(@)
+          return fileExist
         else
           file = new GSFILE(fileName, localStorageKey)
-          @hotFiles[file.getName()] = file
+          @hotFiles.set(file.getName(), file)
           file.open(@)
           @_handleClose(file)
           return file
@@ -83,7 +83,7 @@ GsFileSystem = (localStorageKey)->
     # return: void
     storageFile: (gsFile)->
       filesListChanged = @filesNameList.indexOf(gsFile.getName()) is -1
-      @hotFiles[gsFile.getName()] = gsFile
+      @hotFiles.set(gsFile.getName(), gsFile)
       data = gsFile.getData()
       @storage.setItem(@_storageKeyForUse() + gsFile.getName(), @_strfy(data))
       if filesListChanged
@@ -102,15 +102,16 @@ GsFileSystem = (localStorageKey)->
     # @param {fileName} string
     # #return: a GSFile or null
     _getFileInMemoryOrLocalStorage:(fileName)->
-      fileExistJS = @hotFiles[fileName]
+      fileExistJS = @hotFiles.get(fileName)
       if fileExistJS
+        console.log fileExistJS.getName()
         return fileExistJS
       existLS = @storage.getItem(@_storageKeyForUse() + fileName)
       if existLS
         parsedFile = @_parseJs(existLS)
-        file = new GSFILE(parsedFile.name)
+        file = new GSFILE(parsedFile.name, localStorageKey)
         file.setContent(parsedFile.content)
-        @hotFiles[fileName] = file
+        @hotFiles.set(parsedFile.name, file)
         return file
     
     # Set in @filesNameList all files names storaged in 
@@ -144,8 +145,8 @@ GsFileSystem = (localStorageKey)->
             @_fire("listchange")
           else
             # if file is opened
-            if @hotFiles[newFile.name]
-              @hotFiles[newFile.name].update(newFile.content, @)
+            if @hotFiles.get(newFile.name)
+              @hotFiles.get(newFile.name).update(newFile.content, @)
       )
 
     _storageKeyForUse:->
@@ -157,7 +158,7 @@ GsFileSystem = (localStorageKey)->
       console.log "initialized"
       CustomEventTarget.apply @
       @storage = window.localStorage
-      @hotFiles = {}
+      @hotFiles = new Map()
       @filesNameList = []
       @_listenOtherTabsFilesChange()
       @_localStorageKey = localStorageKey or "GSFiles"

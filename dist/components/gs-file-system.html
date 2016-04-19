@@ -31,10 +31,10 @@
         },
         removeFile: function(fileName) {
           var getGsFile;
-          getGsFile = this.hotFiles[fileName];
+          getGsFile = this.hotFiles.get(fileName);
           if (getGsFile) {
             getGsFile.remove();
-            delete this.hotFiles[fileName];
+            this.hotFiles["delete"](fileName);
           }
           this.storage.removeItem(this._storageKeyForUse() + fileName);
           if (this.filesNameList.indexOf(fileName) !== -1) {
@@ -49,11 +49,11 @@
           if (this._fileNameValid(fileName)) {
             fileExist = this._getFileInMemoryOrLocalStorage(fileName);
             if (fileExist) {
+              fileExist.open(this);
               return fileExist;
-              return fileExist.open(this);
             } else {
               file = new GSFILE(fileName, localStorageKey);
-              this.hotFiles[file.getName()] = file;
+              this.hotFiles.set(file.getName(), file);
               file.open(this);
               this._handleClose(file);
               return file;
@@ -72,7 +72,7 @@
         storageFile: function(gsFile) {
           var data, filesListChanged;
           filesListChanged = this.filesNameList.indexOf(gsFile.getName()) === -1;
-          this.hotFiles[gsFile.getName()] = gsFile;
+          this.hotFiles.set(gsFile.getName(), gsFile);
           data = gsFile.getData();
           this.storage.setItem(this._storageKeyForUse() + gsFile.getName(), this._strfy(data));
           if (filesListChanged) {
@@ -87,16 +87,17 @@
         },
         _getFileInMemoryOrLocalStorage: function(fileName) {
           var existLS, file, fileExistJS, parsedFile;
-          fileExistJS = this.hotFiles[fileName];
+          fileExistJS = this.hotFiles.get(fileName);
           if (fileExistJS) {
+            console.log(fileExistJS.getName());
             return fileExistJS;
           }
           existLS = this.storage.getItem(this._storageKeyForUse() + fileName);
           if (existLS) {
             parsedFile = this._parseJs(existLS);
-            file = new GSFILE(parsedFile.name);
+            file = new GSFILE(parsedFile.name, localStorageKey);
             file.setContent(parsedFile.content);
-            this.hotFiles[fileName] = file;
+            this.hotFiles.set(parsedFile.name, file);
             return file;
           }
         },
@@ -129,8 +130,8 @@
                   _this.filesNameList.push(newFile.name);
                   return _this._fire("listchange");
                 } else {
-                  if (_this.hotFiles[newFile.name]) {
-                    return _this.hotFiles[newFile.name].update(newFile.content, _this);
+                  if (_this.hotFiles.get(newFile.name)) {
+                    return _this.hotFiles.get(newFile.name).update(newFile.content, _this);
                   }
                 }
               }
@@ -144,7 +145,7 @@
           console.log("initialized");
           CustomEventTarget.apply(this);
           this.storage = window.localStorage;
-          this.hotFiles = {};
+          this.hotFiles = new Map();
           this.filesNameList = [];
           this._listenOtherTabsFilesChange();
           return this._localStorageKey = localStorageKey || "GSFiles";
