@@ -1,7 +1,7 @@
 Gobstones File System
 ======
 ### File System for Gobstones Web
-> Service for managing files and save its into localStorage.
+> Service to handle files and save them into localStorage.
 
 ###### Version: 0.0.0
 
@@ -19,7 +19,7 @@ grunt server
 <link rel="import" href="bower_components/gs-file-system/dist/components/gs-file-system.html">
 ```
 
-###### And initialize in a local component variable
+###### And initialize in a local variable
 ```
 <template>
 </template>
@@ -114,7 +114,7 @@ grunt server
 
 ```
 
-###### Get all files name Storage in localStorage
+###### Get all files name storages in localStorage
 ```
 <template>
 </template>
@@ -138,7 +138,7 @@ grunt server
 
 ```
 
-###### Events that let you handle all file system
+###### Some events that let you handle all file system
 
 > All system browser tabs are comunicated.
 > Because of this, events may be fired from other tabs.
@@ -194,6 +194,6 @@ grunt server
 
 ```
 
-> For performance issues you can do GsFile.close()
-> everytime you dont needed when any object use it
-> GsFileSystem clean the reference in memory.
+> For performance issues you can do GsFile.close(hostObject)
+> everytime you dont need anymore a GsFile.
+> This clean the GsFile reference in the system, if no other object use it.

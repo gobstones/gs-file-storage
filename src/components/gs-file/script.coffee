@@ -49,7 +49,7 @@ GSFILE = do ->
       openerIndex = _openers.indexOf(host)
       if openerIndex isnt -1
         _openers.splice(openerIndex, 1)
-        if _openers.length() == 0
+        if _openers.length == 0
           @_fire('closefile')
 
     # Remove file listeners

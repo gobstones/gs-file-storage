@@ -70,12 +70,14 @@ GsFileSystem = (localStorageKey)->
           return file
       else
         throw "Invalid file name."
-    # handle file close event when any object is using 
+    
+    # Handle file close event when any object is using 
     # file.
     # @param {file} a gs-file to listen for closefile event.
     _handleClose: (file)->
       file.addEventListener('closefile', (event)=>
-        console.log " se llamo al evento"
+        file = event.target
+        @hotFiles.delete(file.getName())
       )
 
     # Save file in localStorage
@@ -112,6 +114,7 @@ GsFileSystem = (localStorageKey)->
         file = new GSFILE(parsedFile.name, localStorageKey)
         file.setContent(parsedFile.content)
         @hotFiles.set(parsedFile.name, file)
+        @_handleClose(file)
         return file
     
     # Set in @filesNameList all files names storaged in 

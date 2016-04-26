@@ -65,7 +65,8 @@
         _handleClose: function(file) {
           return file.addEventListener('closefile', (function(_this) {
             return function(event) {
-              return console.log(" se llamo al evento");
+              file = event.target;
+              return _this.hotFiles["delete"](file.getName());
             };
           })(this));
         },
@@ -98,6 +99,7 @@
             file = new GSFILE(parsedFile.name, localStorageKey);
             file.setContent(parsedFile.content);
             this.hotFiles.set(parsedFile.name, file);
+            this._handleClose(file);
             return file;
           }
         },

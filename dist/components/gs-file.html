@@ -43,7 +43,7 @@
           openerIndex = _openers.indexOf(host);
           if (openerIndex !== -1) {
             _openers.splice(openerIndex, 1);
-            if (_openers.length() === 0) {
+            if (_openers.length === 0) {
               return this._fire('closefile');
             }
           }
